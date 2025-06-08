@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="js/menu.js"></script>
+  <script src="js/image-optimizer.js"></script>
   <style>
     .menu-index {
       color: rgb(255, 255, 255) !important;
@@ -56,7 +57,7 @@
           <div class="flex-item flex-column">
             <h1>Qiqian Fu</h1>
             <p class="text text-large">
-              A senior undergraduate at <a target="_blank" href="javascript:void(0)">ZJUI Institute</a><br>
+              A graduate student at <a target="_blank" href="https://siebelschool.illinois.edu/">UIUC</a><br>
 <!-- 
               <a target="_blank" href="javascript:void(0)">Laboratory</a><br>
               <a target="_blank" href="javascript:void(0)">Institute</a><br>
@@ -70,11 +71,11 @@
                       <img src="img/github.svg">
                   </button>
                 </a>
-                <a href="https://github.com/QiqianFu">
+                <!-- <a href="https://github.com/QiqianFu">
                   <button class="custom-button-flat">
                       <img src="img/xiaohongshu.svg">
                   </button>
-                </a>
+                </a> -->
                 
               </div>
 
@@ -85,8 +86,8 @@
           <div class="flex-item flex-column">
             <h2>About Me</h2>
             <p class="text-large add-top-margin">
-              I am currently a senior (2021-now) undergraduate majoring in Computer Engineering at the University of Illinois at Urbana-Champaign and Zhejiang University.
-              My research interests mainly lie in computer vision, especially in video action recognition and general purpose model.
+              I'm now a First-year M.S. student in Computer Science, <a target="_blank" href="https://siebelschool.illinois.edu/">UIUC</a>. I obtained my Bachelor's Degree from <a target="_blank" href="https://zjui.intl.zju.edu.cn/en">ZJU-UIUC Institute</a>.
+              My research interests mainly lie in computer vision, especially in video action recognition and VLM.
               <!-- <div class="custom-list">
                 <p class="text-large">• <span>Text Only</span></p>
                 <p class="text-large">• <span>Buttons and Inputs</span></p>
@@ -809,7 +810,7 @@
             <hr>
           </div>
         </div>
-        <div class="flex-row">
+        <!-- <div class="flex-row">
           <div class="flex-item flex-item-stretch flex-column">
             <img class="image max-width-400" src="img/mmware.jpg">
           </div>
@@ -822,8 +823,9 @@
               condimentum rhoncus, sem quam semper libero, sit amet.
             </p>
           </div>
-        </div>
-        <div class="flex-row">
+        </div> -->
+
+        <!-- <div class="flex-row">
           <div class="flex-item flex-item-stretch flex-column">
             <img class="image max-width-400" src="img/framers.jpg">
           </div>
@@ -836,6 +838,20 @@
               Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel
               augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
               condimentum rhoncus, sem quam semper libero, sit amet.
+            </p>
+          </div>
+        </div> -->
+
+        <div class="flex-row">
+          <div class="flex-item flex-item-stretch flex-column">
+            <div class="project-image-container">
+              <img class="project-image landscape-image" src="img/textregion.png" alt="TextRegion Framework">
+            </div>
+          </div>
+          <div class="flex-item flex-item-stretch-4 flex-column">
+            <p class="text">
+              <a class="highlight-text" href="https://arxiv.org/abs/2505.23769">TextRegion: Text-Aligned Region Tokens from Frozen Image-Text Models</a><br>
+              We propose TextRegion, a simple, effective, and training-free framework that combines the strengths of image-text models and SAM2 to generate powerful text-aligned region tokens. These tokens enable detailed visual understanding while preserving open-vocabulary capabilities. They can be directly applied to various downstream tasks, including open-world semantic segmentation, referring expression comprehension, and grounding. We conduct extensive evaluations and consistently achieve superior or competitive performance compared to state-of-the-art training-free methods.
             </p>
           </div>
         </div>
