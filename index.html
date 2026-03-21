@@ -52,7 +52,7 @@
         <!--Start Intro-->
         <div class="flex-row">
           <div class="flex-item flex-column">
-            <img class="image" src="img/my_pic.png">
+            <img class="image" src="img/my_pic.png" style="max-width: 200px;">
           </div>
           <div class="flex-item flex-column">
             <h1>Qiqian Fu</h1>
@@ -87,7 +87,7 @@
             <h2>About Me</h2>
             <p class="text-large add-top-margin">
               I'm now a First-year M.S. student in Computer Science, <a target="_blank" href="https://siebelschool.illinois.edu/">UIUC</a>. I obtained my Bachelor's Degree from <a target="_blank" href="https://zjui.intl.zju.edu.cn/en">ZJU-UIUC Institute</a>.
-              My research interests mainly lie in computer vision, especially in video action recognition and VLM.
+              My research interests mainly lie in multimodal learning, VLM reasoning, and visual grounding.
               <!-- <div class="custom-list">
                 <p class="text-large">• <span>Text Only</span></p>
                 <p class="text-large">• <span>Buttons and Inputs</span></p>
@@ -803,44 +803,13 @@
         </div> -->
         <!--END Text with Iframe-->
         <!-------------------------------------------------------------------------------------------->
-        <!--Start List of Projects-->
+        <!--Start Research Projects-->
         <div class="flex-row">
           <div class="flex-item flex-column full-width">
-            <h2 id="list-of-projects">List of Projects</h2>
+            <h2 id="research-projects">Research Projects</h2>
             <hr>
           </div>
         </div>
-        <!-- <div class="flex-row">
-          <div class="flex-item flex-item-stretch flex-column">
-            <img class="image max-width-400" src="img/mmware.jpg">
-          </div>
-          <div class="flex-item flex-item-stretch-4 flex-column">
-            <p class="text">
-              <a class="highlight-text" href="https://arxiv.org/abs/2311.10261">Vision meets mmWave Radar: 3D Object Perception
-                Benchmark for Autonomous Driving</a><br>
-              Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel
-              augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-              condimentum rhoncus, sem quam semper libero, sit amet.
-            </p>
-          </div>
-        </div> -->
-
-        <!-- <div class="flex-row">
-          <div class="flex-item flex-item-stretch flex-column">
-            <img class="image max-width-400" src="img/framers.jpg">
-          </div>
-          <div class="flex-item flex-item-stretch-4 flex-column">
-            <p class="text">
-              <a class="highlight-text" href="https://arxiv.org/pdf/2309.09083">FrameRS: A Video Frame Compression Model
-                Composed by Self supervised Video Frame
-                Reconstructor and Key Frame Selector
-                </a><br>
-              Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel
-              augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-              condimentum rhoncus, sem quam semper libero, sit amet.
-            </p>
-          </div>
-        </div> -->
 
         <div class="flex-row">
           <div class="flex-item flex-item-stretch flex-column">
@@ -851,8 +820,65 @@
           <div class="flex-item flex-item-stretch-4 flex-column">
             <p class="text">
               <a class="highlight-text" href="https://arxiv.org/abs/2505.23769">TextRegion: Text-Aligned Region Tokens from Frozen Image-Text Models</a><br>
-              We propose TextRegion, a simple, effective, and training-free framework that combines the strengths of image-text models and SAM2 to generate powerful text-aligned region tokens. These tokens enable detailed visual understanding while preserving open-vocabulary capabilities. They can be directly applied to various downstream tasks, including open-world semantic segmentation, referring expression comprehension, and grounding. We conduct extensive evaluations and consistently achieve superior or competitive performance compared to state-of-the-art training-free methods.
+              <span style="color: #666; font-size: 0.9em;">UIUC &middot; Sep 2024 &ndash; Apr 2025 &middot; <strong>Accepted at TMLR (J2C, top 10%)</strong></span><br>
+              Proposed TextRegion, a training-free method to extract text-aligned region-level representations from frozen image-text models (CLIP, SigLIP) that natively only produce image-level features. Core idea: inject SAM2 segmentation masks as attention constraints into the final transformer layer, forcing region tokens to aggregate only region-relevant patches. Designed multi-resolution patch encoding, implemented SAM2 mask merging, and built the inference and evaluation pipeline across open-world segmentation, referring expression comprehension, and grounding.
             </p>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <p class="text">
+              <strong class="highlight-text">Aligning Janus via RL for "Chain of Image" Generation</strong><br>
+              <span style="color: #666; font-size: 0.9em;">Zhejiang University &middot; May 2025 &ndash; Aug 2025</span><br>
+              Led the Supervised Fine-Tuning (SFT) stage for RL-based alignment of the Janus text-to-image unified model toward multi-step "Chain of Image" generation. Built a TRL-based SFT pipeline for interleaved text-image inputs, including custom data processors/collators and a step-wise loss that applies gradients only to text-related logits. Identified a key failure mode where the model produces redundant CoT steps, a problem also observed in concurrent work on iterative generation.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <p class="text">
+              <strong class="highlight-text">Enhancing Visual Grounding of VLM In-Context Learning</strong><br>
+              <span style="color: #666; font-size: 0.9em;">UIUC &middot; Jan 2026 &ndash; Present</span><br>
+              Studying failure cases of VLM in-context reasoning on geometry-focused math and logic problems that require visual grounding. Built a small diagnostic dataset and ran controlled interventions (CoT key-token ablation, image masking/removal, and text-only vs. text+image prompts). Found that relocating CoT template tokens from the input to the prefilled generation significantly improves visual grounding, suggesting input-side reasoning templates distract the model from attending to visual evidence.
+            </p>
+          </div>
+        </div>
+        <!--End Research Projects-->
+        <!-------------------------------------------------------------------------------------------->
+        <!--Start Intern Experience-->
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <h2 id="intern-experience">Internship Experience</h2>
+            <hr>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <p class="text">
+              <strong style="font-size: 1.1em;">Tencent &mdash; MLE Intern</strong><br>
+              <span style="color: #666; font-size: 0.9em;">Guangzhou, China &middot; Oct 2025 &ndash; Dec 2025</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <p class="text">
+              <strong style="font-size: 1.1em;">Huawei &mdash; AI Engineer Intern</strong><br>
+              <span style="color: #666; font-size: 0.9em;">Shenzhen, China &middot; Jun 2024 &ndash; Aug 2024</span>
+            </p>
+          </div>
+        </div>
+        <!--End Intern Experience-->
+        <!-------------------------------------------------------------------------------------------->
+        <!--Start Personal Projects-->
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <h2 id="personal-projects">Personal Projects</h2>
+            <hr>
           </div>
         </div>
 
@@ -864,25 +890,33 @@
           </div>
           <div class="flex-item flex-item-stretch-4 flex-column">
             <p class="text">
-              <a class="highlight-text" href="leetcode-agent/index.html">LeetCode Agent: AI-Powered Terminal Companion for LeetCode Practice</a><br>
-              A terminal CLI tool that combines natural-language AI tutoring (DeepSeek) with intelligent spaced repetition for deliberate LeetCode practice. Features include company-targeted problem selection via CodeTop, daily review planning, contextual hints and explanations aware of your code, and a Rich-formatted terminal interface. Built with Python, prompt_toolkit, and LeetCode GraphQL API.
+              <a class="highlight-text" href="leetcode-agent/index.html">LeetCode Agent: AI-Powered Terminal Problem-Solving CLI</a><br>
+              <span style="color: #666; font-size: 0.9em;">Python, DeepSeek API, SQLite, prompt_toolkit, Rich &middot; Mar 2026 &middot; <a href="https://github.com/QiqianFu/leetcode_agent">GitHub</a></span><br>
+              Built a terminal CLI integrating LeetCode GraphQL API and CodeTop API, supporting natural-language problem selection, contextual hints, code review, and company-targeted high-frequency problem recommendations. Designed a dual-layer interaction architecture: 12 slash commands handle deterministic operations while only intent-requiring interactions are routed to the AI Agent. Implemented a spaced-repetition scheduler driven by struggle score and hint count for personalized review plans.
             </p>
           </div>
         </div>
-        <!-- <div class="flex-row">
-          <div class="flex-item flex-item-stretch flex-column">
-            <img class="image max-width-400" src="img/dummay-img.png">
-          </div>
-          <div class="flex-item flex-item-stretch-4 flex-column">
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
             <p class="text">
-              <a class="highlight-text" href="javascript:void(0)">Li Europan Lingues es Membres Del Sam Familie</a><br>
-              Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel
-              augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-              condimentum rhoncus, sem quam semper libero, sit amet.
+              <strong class="highlight-text">Real-Time AI Voice Assistant</strong><br>
+              <span style="color: #666; font-size: 0.9em;">Electron, Node.js, Express, WebSocket, Alibaba Cloud ASR &middot; Aug 2025 &ndash; Present</span><br>
+              Developed a cross-platform desktop AI assistant with real-time speech-to-text (DashScope Paraformer ASR via WebSocket) + streaming LLM responses (DeepSeek/GPT/Qwen), achieving sub-500ms perceived latency. Built a secure server architecture with JWT authentication, centralized API key management, quota tracking, HTTPS/TLS, and V8 bytecode compilation for core code protection. Implemented intelligent speech segment merging, OCR-based screenshot recognition for visual QA, and a multi-agent mode with customizable personas.
             </p>
           </div>
-        </div> -->
-        <!--End List of Projects-->
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-item flex-column full-width">
+            <p class="text">
+              <strong class="highlight-text">Automated ChatGPT Deep Research via macOS Automation</strong><br>
+              <span style="color: #666; font-size: 0.9em;">Swift, Apple Vision/CoreGraphics, Python MCP Server &middot; Feb 2026</span><br>
+              Built a macOS GUI automation toolkit exposed as an MCP server, enabling any LLM agent to drive desktop-level research workflows. Implemented a three-layer UI localization strategy: Vision OCR keyword search, multi-scale binary template matching (SAD), and Accessibility API (AXUIElement). Supports a fully automated pipeline: open browser, navigate to ChatGPT, input research topic, trigger Deep Research, OCR-poll for content stability, and copy results. Includes multi-display interactive calibration via mouse-hover stability detection.
+            </p>
+          </div>
+        </div>
+        <!--End Personal Projects-->
         <!-------------------------------------------------------------------------------------------->
     
         <!--End Credits-->
