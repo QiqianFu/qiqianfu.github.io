@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>LeetCode Agent — Qiqian Fu</title>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" media="screen" rel="stylesheet"
+    type="text/css" />
+  <link href="../css/frame.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../css/controls.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/leetcode-agent.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    .menu-lc-agent {
+      color: rgb(0, 0, 0) !important;
+      opacity: 1 !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <div class="menu-container">
+    <div class="menu">
+      <div class="menu-table flex-row-space-between">
+        <div class="logo flex-row-center">
+          <a href="../index.html">Qiqian Fu</a>
+        </div>
+        <a class="menu-button" tabindex="0" href="javascript:void(0)">
+          <img src="../img/menu.png">
+        </a>
+        <div class="menu-items flex-row-center flex-item">
+          <a href="../index.html">Overview</a>
+          <a class="menu-lc-agent" href="index.html">LeetCode Agent</a>
+          <a href="https://github.com/QiqianFu">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-container">
+
+    <!--======================== Hero (full viewport) ========================-->
+    <section class="hero-full">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <i class="fas fa-terminal hero-icon"></i>LeetCode Agent
+        </h1>
+        <p class="hero-subtitle">
+          An AI-powered terminal companion for deliberate LeetCode practice — featuring
+          intelligent spaced repetition, company-targeted problem selection, and real-time
+          tutoring powered by DeepSeek.
+        </p>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href="https://github.com/QiqianFu/leetcode_agent" target="_blank">
+            <i class="fab fa-github"></i> View on GitHub
+          </a>
+        </div>
+      </div>
+      <div class="scroll-hint">
+        <span>Scroll to explore</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </section>
+
+    <!--======================== Demo 1: Start Practice ========================-->
+    <section class="demo-scroll-section" id="demo-section-1">
+      <div class="demo-sticky">
+        <div class="demo-label">
+          <span class="demo-step">01</span>
+          <h2>Start Practice</h2>
+          <p>Tell the agent what you want to practice — it picks problems, creates solution files, and manages your review queue.</p>
+        </div>
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots"><span class="dot dot-close"></span><span class="dot dot-minimize"></span><span class="dot dot-maximize"></span></div>
+            <span class="terminal-title">leetcode_agent — zsh</span>
+            <div class="terminal-spacer"></div>
+          </div>
+          <div class="terminal-body">
+            <div class="tl tl-dim">LeetCode Agent v0.1.0  deepseek-chat · ~/leetcode_agent</div>
+            <div class="tl tl-dim">当前目标：微软 | 难度：Medium | 模式：按标签（数组）</div>
+            <div class="tl"><span class="tp">&gt; </span><span class="tl-typed">开始刷题</span></div>
+            <div class="tl"><span class="ta">●</span> 我来帮你抽一道题开始刷题。</div>
+            <div class="tl tl-tool">  ⊙ pick_problem</div>
+            <div class="tl tl-table-wrap"><div class="tl-table-title">复习题目</div><table class="term-table"><thead><tr><th>#</th><th>题目</th><th>难度</th><th>标签</th></tr></thead><tbody><tr><td>1</td><td>Two Sum</td><td class="td-easy">Easy</td><td>Array, Hash Table</td></tr><tr><td>20</td><td>Valid Parentheses</td><td class="td-easy">Easy</td><td>Stack, String</td></tr></tbody></table></div>
+            <div class="tl tl-table-wrap"><div class="tl-table-title">新题推荐</div><table class="term-table"><thead><tr><th>#</th><th>题目</th><th>难度</th><th>标签</th></tr></thead><tbody><tr><td>215</td><td>数组中的第K个最大元素</td><td class="td-medium">Medium</td><td></td></tr><tr><td>53</td><td>最大子数组和</td><td class="td-medium">Medium</td><td></td></tr><tr><td>33</td><td>搜索旋转排序数组</td><td class="td-medium">Medium</td><td></td></tr></tbody></table></div>
+            <div class="tl tl-success">已开始：215. Kth Largest Element in an Array (Medium)</div>
+            <div class="tl tl-link">🔗 leetcode.com/problems/kth-largest-element-in-an-array/</div>
+            <div class="tl tl-file">📁 divide_and_conquer/215_kth_largest_element_in_an_array.py</div>
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="cursor">█</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--======================== Demo 2: AI Tutoring ========================-->
+    <section class="demo-scroll-section" id="demo-section-2">
+      <div class="demo-sticky">
+        <div class="demo-label">
+          <span class="demo-step">02</span>
+          <h2>AI Tutoring</h2>
+          <p>When you're stuck, just ask — the agent reads your code and walks you through multiple approaches.</p>
+        </div>
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots"><span class="dot dot-close"></span><span class="dot dot-minimize"></span><span class="dot dot-maximize"></span></div>
+            <span class="terminal-title">leetcode_agent — zsh</span>
+            <div class="terminal-spacer"></div>
+          </div>
+          <div class="terminal-body">
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="tl-typed">教我，实在是不会</span></div>
+            <div class="tl"><span class="ta">●</span> 我先看看你当前的代码，然后给你讲解这道题的解题思路。</div>
+            <div class="tl tl-tool">  ⊙ read_solution</div>
+            <div class="tl tl-tool">  ⊙ count_teach</div>
+            <div class="tl"><span class="ta">●</span> 好的，这道题要求找到数组中第k大的元素。有几种经典解法：</div>
+            <div class="tl tl-heading">  方法一：排序（最简单直接）</div>
+            <div class="tl tl-code-wrap"><pre class="term-code"><span class="code-kw">class</span> <span class="code-cls">Solution</span>:
+    <span class="code-kw">def</span> <span class="code-fn">findKthLargest</span>(self, nums: List[int], k: int) -&gt; int:
+        nums.sort()
+        <span class="code-kw">return</span> nums[-k]</pre></div>
+            <div class="tl tl-dim">  时间复杂度：O(n log n)，空间复杂度：O(1)</div>
+            <div class="tl tl-heading">  方法二：使用堆（优先队列）</div>
+            <div class="tl tl-code-wrap"><pre class="term-code"><span class="code-kw">import</span> heapq
+
+<span class="code-kw">class</span> <span class="code-cls">Solution</span>:
+    <span class="code-kw">def</span> <span class="code-fn">findKthLargest</span>(self, nums: List[int], k: int) -&gt; int:
+        <span class="code-kw">return</span> heapq.nlargest(k, nums)[-1]</pre></div>
+            <div class="tl tl-dim">  时间复杂度：O(n log k)，推荐面试使用 ✨</div>
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="cursor">█</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--======================== Screenshots (scroll reveal, one at a time) ========================-->
+    <section class="section">
+      <div class="section-inner">
+        <h2 class="section-title">Screenshots</h2>
+        <p class="section-desc">
+          Real terminal output with Rich-formatted tables, colored syntax, and structured AI responses.
+        </p>
+        <div class="screenshots-sequential">
+          <div class="screenshot-solo reveal-on-scroll" data-lightbox>
+            <img src="img/demo1.png" alt="Daily plan with review and new problems">
+            <p class="screenshot-caption">Daily plan: review queue + new problem recommendations</p>
+          </div>
+          <div class="screenshot-solo reveal-on-scroll" data-lightbox>
+            <img src="img/demo2.png" alt="AI teaching with code explanations">
+            <p class="screenshot-caption">Natural language search + structured AI explanations</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--======================== Architecture ========================-->
+    <section class="section section-gray">
+      <div class="section-inner">
+        <h2 class="section-title">Architecture</h2>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <i class="fas fa-terminal"></i>
+            <strong>CLI</strong>
+            <span>prompt_toolkit + Rich</span>
+          </div>
+          <div class="arch-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="arch-node">
+            <i class="fas fa-robot"></i>
+            <strong>AI Agent</strong>
+            <span>DeepSeek + Function Calling</span>
+          </div>
+          <div class="arch-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="arch-node">
+            <i class="fas fa-code"></i>
+            <strong>LeetCode</strong>
+            <span>GraphQL API</span>
+          </div>
+        </div>
+        <div class="arch-sub-flow">
+          <div class="arch-connector">↕</div>
+          <div class="arch-node">
+            <i class="fas fa-database"></i>
+            <strong>Storage</strong>
+            <span>SQLite + Spaced Repetition Scheduler</span>
+          </div>
+        </div>
+        <div class="tech-badges">
+          <span class="tech-badge">Python 3.11+</span>
+          <span class="tech-badge">DeepSeek V4</span>
+          <span class="tech-badge">SQLite</span>
+          <span class="tech-badge">Rich</span>
+          <span class="tech-badge">prompt_toolkit</span>
+          <span class="tech-badge">LeetCode GraphQL</span>
+          <span class="tech-badge">CodeTop API</span>
+          <span class="tech-badge">OpenAI SDK</span>
+        </div>
+      </div>
+    </section>
+
+    <!--======================== Footer ========================-->
+    <div class="page-footer">
+      Built by <a href="../index.html">Qiqian Fu</a> · 2025
+    </div>
+
+  </div>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-img" id="lightbox-img">
+  </div>
+
+  <script src="js/leetcode-agent.js"></script>
+</body>
+
+</html>
