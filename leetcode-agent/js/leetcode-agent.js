@@ -70,7 +70,7 @@
     var hero = document.querySelector(".hero-full");
     if (hero && sections.length > 0) {
       var heroRect = hero.getBoundingClientRect();
-      if (heroRect.bottom > 0 && heroRect.bottom < window.innerHeight * 0.7) {
+      if (heroRect.bottom > 0 && heroRect.bottom < window.innerHeight * 0.9) {
         isSnapping = true;
         var targetY = window.scrollY + sections[0].getBoundingClientRect().top - NAV_HEIGHT + 1;
         window.scrollTo({ top: targetY, behavior: "smooth" });

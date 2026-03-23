@@ -826,26 +826,32 @@
           </div>
         </div>
 
+        <!--End Research Projects-->
+        <!-------------------------------------------------------------------------------------------->
+        <!--Start Personal Projects-->
         <div class="flex-row">
           <div class="flex-item flex-column full-width">
-            <p class="text">
-              <strong class="highlight-text">Aligning Janus via RL for "Chain of Image" Generation</strong><br>
-              <span style="color: #666; font-size: 0.9em;">Zhejiang University &middot; May 2025 &ndash; Aug 2025</span><br>
-              Led the Supervised Fine-Tuning (SFT) stage for RL-based alignment of the Janus text-to-image unified model toward multi-step "Chain of Image" generation. Built a TRL-based SFT pipeline for interleaved text-image inputs, including custom data processors/collators and a step-wise loss that applies gradients only to text-related logits. Identified a key failure mode where the model produces redundant CoT steps, a problem also observed in concurrent work on iterative generation.
-            </p>
+            <h2 id="personal-projects">Personal Projects</h2>
+            <hr>
           </div>
         </div>
 
         <div class="flex-row">
-          <div class="flex-item flex-column full-width">
+          <div class="flex-item flex-item-stretch flex-column">
+            <div class="project-image-container">
+              <img class="project-image landscape-image" src="leetcode-agent/img/demo1.png" alt="LeetCode Agent Demo">
+            </div>
+          </div>
+          <div class="flex-item flex-item-stretch-4 flex-column">
             <p class="text">
-              <strong class="highlight-text">Enhancing Visual Grounding of VLM In-Context Learning</strong><br>
-              <span style="color: #666; font-size: 0.9em;">UIUC &middot; Jan 2026 &ndash; Present</span><br>
-              Studying failure cases of VLM in-context reasoning on geometry-focused math and logic problems that require visual grounding. Built a small diagnostic dataset and ran controlled interventions (CoT key-token ablation, image masking/removal, and text-only vs. text+image prompts). Found that relocating CoT template tokens from the input to the prefilled generation significantly improves visual grounding, suggesting input-side reasoning templates distract the model from attending to visual evidence.
+              <a class="highlight-text" href="leetcode-agent/index.html">LeetCode Agent: AI-Powered Terminal Problem-Solving CLI</a><br>
+              <span style="color: #666; font-size: 0.9em;">Python, DeepSeek API, SQLite, prompt_toolkit, Rich &middot; Mar 2026 &middot; <a href="https://github.com/QiqianFu/leetcode_agent">GitHub</a></span><br>
+              Built a terminal CLI integrating LeetCode GraphQL API and CodeTop API, supporting natural-language problem selection, contextual hints, code review, and company-targeted high-frequency problem recommendations. Designed a dual-layer interaction architecture: 12 slash commands handle deterministic operations while only intent-requiring interactions are routed to the AI Agent. Implemented a spaced-repetition scheduler driven by struggle score and hint count for personalized review plans.
             </p>
           </div>
         </div>
-        <!--End Research Projects-->
+
+        <!--End Personal Projects-->
         <!-------------------------------------------------------------------------------------------->
         <!--Start Intern Experience-->
         <div class="flex-row">
@@ -873,50 +879,6 @@
           </div>
         </div>
         <!--End Intern Experience-->
-        <!-------------------------------------------------------------------------------------------->
-        <!--Start Personal Projects-->
-        <div class="flex-row">
-          <div class="flex-item flex-column full-width">
-            <h2 id="personal-projects">Personal Projects</h2>
-            <hr>
-          </div>
-        </div>
-
-        <div class="flex-row">
-          <div class="flex-item flex-item-stretch flex-column">
-            <div class="project-image-container">
-              <img class="project-image landscape-image" src="leetcode-agent/img/demo1.png" alt="LeetCode Agent Demo">
-            </div>
-          </div>
-          <div class="flex-item flex-item-stretch-4 flex-column">
-            <p class="text">
-              <a class="highlight-text" href="leetcode-agent/index.html">LeetCode Agent: AI-Powered Terminal Problem-Solving CLI</a><br>
-              <span style="color: #666; font-size: 0.9em;">Python, DeepSeek API, SQLite, prompt_toolkit, Rich &middot; Mar 2026 &middot; <a href="https://github.com/QiqianFu/leetcode_agent">GitHub</a></span><br>
-              Built a terminal CLI integrating LeetCode GraphQL API and CodeTop API, supporting natural-language problem selection, contextual hints, code review, and company-targeted high-frequency problem recommendations. Designed a dual-layer interaction architecture: 12 slash commands handle deterministic operations while only intent-requiring interactions are routed to the AI Agent. Implemented a spaced-repetition scheduler driven by struggle score and hint count for personalized review plans.
-            </p>
-          </div>
-        </div>
-
-        <div class="flex-row">
-          <div class="flex-item flex-column full-width">
-            <p class="text">
-              <strong class="highlight-text">Real-Time AI Voice Assistant</strong><br>
-              <span style="color: #666; font-size: 0.9em;">Electron, Node.js, Express, WebSocket, Alibaba Cloud ASR &middot; Aug 2025 &ndash; Present</span><br>
-              Developed a cross-platform desktop AI assistant with real-time speech-to-text (DashScope Paraformer ASR via WebSocket) + streaming LLM responses (DeepSeek/GPT/Qwen), achieving sub-500ms perceived latency. Built a secure server architecture with JWT authentication, centralized API key management, quota tracking, HTTPS/TLS, and V8 bytecode compilation for core code protection. Implemented intelligent speech segment merging, OCR-based screenshot recognition for visual QA, and a multi-agent mode with customizable personas.
-            </p>
-          </div>
-        </div>
-
-        <div class="flex-row">
-          <div class="flex-item flex-column full-width">
-            <p class="text">
-              <strong class="highlight-text">Automated ChatGPT Deep Research via macOS Automation</strong><br>
-              <span style="color: #666; font-size: 0.9em;">Swift, Apple Vision/CoreGraphics, Python MCP Server &middot; Feb 2026</span><br>
-              Built a macOS GUI automation toolkit exposed as an MCP server, enabling any LLM agent to drive desktop-level research workflows. Implemented a three-layer UI localization strategy: Vision OCR keyword search, multi-scale binary template matching (SAD), and Accessibility API (AXUIElement). Supports a fully automated pipeline: open browser, navigate to ChatGPT, input research topic, trigger Deep Research, OCR-poll for content stability, and copy results. Includes multi-display interactive calibration via mouse-hover stability detection.
-            </p>
-          </div>
-        </div>
-        <!--End Personal Projects-->
         <!-------------------------------------------------------------------------------------------->
     
         <!--End Credits-->
