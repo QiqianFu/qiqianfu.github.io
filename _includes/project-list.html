@@ -1,0 +1,16 @@
+{% for project in include.projects %}
+<article class="profile-project profile-project--{{ project.image_layout | default: 'standard' }}">
+  <h3 class="profile-project__title"><a href="{{ project.url | relative_url }}">{{ project.title }}</a></h3>
+  <a class="profile-project__image" href="{{ project.url | relative_url }}">
+    <img src="{{ project.image | relative_url }}" alt="{{ project.image_alt | escape }}" loading="lazy">
+  </a>
+  <div class="profile-project__body">
+    <p class="profile-project__meta">{{ project.meta }}</p>
+    {% if project.recognition %}<p class="profile-project__recognition">{{ project.recognition }}</p>{% endif %}
+    <p>{{ project.description }}</p>
+    <div class="profile-project__links">
+      {% for link in project.links %}<a class="btn btn--small btn--primary" href="{{ link.url | relative_url }}">{{ link.label }}</a>{% endfor %}
+    </div>
+  </div>
+</article>
+{% endfor %}

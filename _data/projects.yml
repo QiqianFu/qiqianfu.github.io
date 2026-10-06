@@ -1,0 +1,71 @@
+research:
+  - title: "TextRegion: Text-Aligned Region Tokens from Frozen Image-Text Models"
+    url: "https://arxiv.org/abs/2505.23769"
+    image_layout: "wide"
+    image: "/img/textregion.png"
+    image_alt: "TextRegion framework for text-aligned region representations"
+    meta: "UIUC · Sep 2024 – Apr 2025"
+    recognition: "Accepted at TMLR (J2C, top 10%)"
+    description: >-
+      Proposed TextRegion, a training-free method to extract text-aligned region-level
+      representations from frozen image-text models (CLIP, SigLIP) that natively only
+      produce image-level features. Core idea: inject SAM2 segmentation masks as attention
+      constraints into the final transformer layer, forcing region tokens to aggregate
+      only region-relevant patches. Designed multi-resolution patch encoding, implemented
+      SAM2 mask merging, and built the inference and evaluation pipeline across open-world
+      segmentation, referring expression comprehension, and grounding.
+    links:
+      - label: "Paper"
+        url: "https://arxiv.org/abs/2505.23769"
+personal:
+  - title: "Qev: Qwen-Based Decision Models"
+    url: "https://github.com/QiqianFu/Qev"
+    image_layout: "wide"
+    image: "/assets/images/projects/qev-banner.svg"
+    image_alt: "Qev — decisions, grounded in Qwen"
+    meta: "Python, PyTorch, Qwen · Model training, distillation, data synthesis"
+    description: >-
+      Fine-tunes Qwen into a decision model that returns choices and probabilities
+      for multiple-choice, yes/no, and ordered-rating tasks. Includes shared-context
+      candidate-branch encoding, training and evaluation pipelines, synthetic training
+      data, and model releases from 0.8B to 9B, with supervised fine-tuning and
+      distillation workflows.
+    links:
+      - label: "GitHub"
+        url: "https://github.com/QiqianFu/Qev"
+      - label: "Model"
+        url: "https://huggingface.co/AustinFu/Qev-9B"
+      - label: "Dataset"
+        url: "https://huggingface.co/datasets/AustinFu/Qev-train"
+  - title: "DSH GUI: Desktop Tools and Memory for macOS Agents"
+    url: "https://github.com/QiqianFu/DSH_GUI"
+    image: "/assets/images/projects/dsh-gui-settings.png"
+    image_alt: "DSH GUI settings panel for desktop tools, vision, and memory"
+    meta: "Node.js, Swift, macOS Vision, Accessibility · GUI agents"
+    description: >-
+      Extends DeepSeek Harness with desktop perception, actions, and persistent memory
+      for macOS GUI agents. Combines window discovery, OCR, Accessibility controls,
+      and vision-model fallback with click, type, key, scroll, and drag tools.
+      Adds before-and-after action checks, escalation after repeated targeting failures,
+      and searchable project-level and global memory with a preferences fallback.
+    links:
+      - label: "GitHub"
+        url: "https://github.com/QiqianFu/DSH_GUI"
+  - title: "LeetCode Agent: AI-Powered Terminal Problem-Solving CLI"
+    url: "/leetcode-agent/"
+    image_layout: "portrait"
+    image: "/leetcode-agent/img/demo1.png"
+    image_alt: "LeetCode Agent daily practice plan in the terminal"
+    meta: "Python, DeepSeek API, SQLite, prompt_toolkit, Rich · Mar 2026"
+    description: >-
+      Built a terminal CLI integrating LeetCode GraphQL API and CodeTop API, supporting
+      natural-language problem selection, contextual hints, code review, and company-targeted
+      high-frequency problem recommendations. Designed a dual-layer interaction architecture:
+      12 slash commands handle deterministic operations while only intent-requiring
+      interactions are routed to the AI Agent. Implemented a spaced-repetition scheduler
+      driven by struggle score and hint count for personalized review plans.
+    links:
+      - label: "Project"
+        url: "/leetcode-agent/"
+      - label: "GitHub"
+        url: "https://github.com/QiqianFu/leetcode_agent"

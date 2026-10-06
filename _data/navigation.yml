@@ -1,0 +1,9 @@
+main:
+  - title: "About"
+    url: "/#about-me"
+  - title: "Research"
+    url: "/#research-projects"
+  - title: "Projects"
+    url: "/#personal-projects"
+  - title: "Experience"
+    url: "/#intern-experience"

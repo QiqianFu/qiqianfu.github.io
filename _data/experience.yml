@@ -1,0 +1,46 @@
+# Tencent entries adapted from the September 2026 resume and supporting project notes.
+- company: "Tencent · DML"
+  role: "AI Algorithm Engineer Intern"
+  location: "Chengdu, China"
+  dates: "May 2026 – Aug 2026"
+  highlights:
+    - title: "Agent memory"
+      description: >-
+        Led the synthesis and validation of 20,000 long-dialogue trajectories for
+        learning memory ingestion and retrieval. Designed probes before generating
+        their supporting conversations, covering conflicting facts, multi-hop reasoning,
+        and evolving information, with evidence checks and rejection sampling to
+        produce verifiable training signals.
+    - title: "Cost-aware model routing"
+      description: >-
+        Built a multi-model coding-agent execution and evaluation pipeline that delivered
+        over 100,000 verified trajectories for router training. Used repeated sampling,
+        reference-patch checks, and leakage audits to separate model failures from
+        environment and evaluation errors.
+    - title: "Feedback and evaluation"
+      description: >-
+        Mined user corrections and follow-up behavior for satisfaction signals,
+        calibrated against human annotations. Developed an evaluation pipeline for
+        open-ended agent tasks that decomposes answers into verifiable claims and
+        checks them in the execution environment, using repeated experiments and
+        counterfactual checks to assess reliability.
+- company: "Tencent"
+  role: "AI Algorithm Engineer Intern"
+  location: "Guangzhou, China"
+  dates: "Sep 2025 – Dec 2025"
+  highlights:
+    - title: "Livestream interaction agents"
+      description: >-
+        Took a dual-persona comment agent from scenario research to staged deployment.
+        Built a Dify workflow combining intent recognition, streamer profiles, and
+        comment generation, with a generator–reviser design to balance varied
+        interactions with content control.
+    - title: "Creator content planning"
+      description: >-
+        Built a planning pipeline combining audience interests, reference livestreams,
+        and historical content to generate actionable first-stream plans.
+        Four of the first five creators adopted the plans and went live within two weeks.
+- company: "Huawei"
+  role: "AI Engineer Intern"
+  location: "Shenzhen, China"
+  dates: "Jun 2024 – Aug 2024"

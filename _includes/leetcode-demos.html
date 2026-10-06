@@ -1,0 +1,56 @@
+<details class="project-demo" open>
+<summary>Start Practice</summary>
+<p>Tell the agent what you want to practice — it picks problems, creates solution files, and manages your review queue.</p>
+<div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots"><span class="dot dot-close"></span><span class="dot dot-minimize"></span><span class="dot dot-maximize"></span></div>
+            <span class="terminal-title">leetcode_agent — zsh</span>
+            <div class="terminal-spacer"></div>
+          </div>
+          <div class="terminal-body">
+            <div class="tl tl-dim">LeetCode Agent v0.1.0  deepseek-chat · ~/leetcode_agent</div>
+            <div class="tl tl-dim">当前目标：微软 | 难度：Medium | 模式：按标签（数组）</div>
+            <div class="tl"><span class="tp">&gt; </span><span class="tl-typed">开始刷题</span></div>
+            <div class="tl"><span class="ta">●</span> 我来帮你抽一道题开始刷题。</div>
+            <div class="tl tl-tool">  ⊙ pick_problem</div>
+            <div class="tl tl-table-wrap"><div class="tl-table-title">复习题目</div><table class="term-table"><thead><tr><th>#</th><th>题目</th><th>难度</th><th>标签</th></tr></thead><tbody><tr><td>1</td><td>Two Sum</td><td class="td-easy">Easy</td><td>Array, Hash Table</td></tr><tr><td>20</td><td>Valid Parentheses</td><td class="td-easy">Easy</td><td>Stack, String</td></tr></tbody></table></div>
+            <div class="tl tl-table-wrap"><div class="tl-table-title">新题推荐</div><table class="term-table"><thead><tr><th>#</th><th>题目</th><th>难度</th><th>标签</th></tr></thead><tbody><tr><td>215</td><td>数组中的第K个最大元素</td><td class="td-medium">Medium</td><td></td></tr><tr><td>53</td><td>最大子数组和</td><td class="td-medium">Medium</td><td></td></tr><tr><td>33</td><td>搜索旋转排序数组</td><td class="td-medium">Medium</td><td></td></tr></tbody></table></div>
+            <div class="tl tl-success">已开始：215. Kth Largest Element in an Array (Medium)</div>
+            <div class="tl tl-link">🔗 leetcode.com/problems/kth-largest-element-in-an-array/</div>
+            <div class="tl tl-file">📁 divide_and_conquer/215_kth_largest_element_in_an_array.py</div>
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="cursor">█</span></div>
+          </div>
+        </div>
+</details>
+<details class="project-demo" open>
+<summary>AI Tutoring</summary>
+<p>When you're stuck, just ask — the agent reads your code and walks you through multiple approaches.</p>
+<div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots"><span class="dot dot-close"></span><span class="dot dot-minimize"></span><span class="dot dot-maximize"></span></div>
+            <span class="terminal-title">leetcode_agent — zsh</span>
+            <div class="terminal-spacer"></div>
+          </div>
+          <div class="terminal-body">
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="tl-typed">教我，实在是不会</span></div>
+            <div class="tl"><span class="ta">●</span> 我先看看你当前的代码，然后给你讲解这道题的解题思路。</div>
+            <div class="tl tl-tool">  ⊙ read_solution</div>
+            <div class="tl tl-tool">  ⊙ count_teach</div>
+            <div class="tl"><span class="ta">●</span> 好的，这道题要求找到数组中第k大的元素。有几种经典解法：</div>
+            <div class="tl tl-heading">  方法一：排序（最简单直接）</div>
+            <div class="tl tl-code-wrap"><pre class="term-code"><span class="code-kw">class</span> <span class="code-cls">Solution</span>:
+    <span class="code-kw">def</span> <span class="code-fn">findKthLargest</span>(self, nums: List[int], k: int) -&gt; int:
+        nums.sort()
+        <span class="code-kw">return</span> nums[-k]</pre></div>
+            <div class="tl tl-dim">  时间复杂度：O(n log n)，空间复杂度：O(1)</div>
+            <div class="tl tl-heading">  方法二：使用堆（优先队列）</div>
+            <div class="tl tl-code-wrap"><pre class="term-code"><span class="code-kw">import</span> heapq
+
+<span class="code-kw">class</span> <span class="code-cls">Solution</span>:
+    <span class="code-kw">def</span> <span class="code-fn">findKthLargest</span>(self, nums: List[int], k: int) -&gt; int:
+        <span class="code-kw">return</span> heapq.nlargest(k, nums)[-1]</pre></div>
+            <div class="tl tl-dim">  时间复杂度：O(n log k)，推荐面试使用 ✨</div>
+            <div class="tl tl-prompt">215 Kth Largest Element in an Array &gt; <span class="cursor">█</span></div>
+          </div>
+        </div>
+</details>

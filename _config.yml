@@ -1,0 +1,76 @@
+# Pinned upstream theme; compatible with GitHub Pages branch builds.
+remote_theme: "mmistakes/minimal-mistakes@4.28.1"
+minimal_mistakes_skin: "default"
+locale: "en-US"
+title: "Qiqian Fu"
+name: "Qiqian Fu"
+description: "Second-year M.S. student in Computer Science at UIUC. Agent RL, data synthesis, and model training."
+url: "https://qiqianfu.github.io"
+baseurl: ""
+repository: "QiqianFu/qiqianfu.github.io"
+timezone: "America/Chicago"
+
+# Personal details and sidebar links.
+author:
+  name: "Qiqian Fu"
+  avatar: "/img/my_pic.png"
+  bio: "Second-year M.S. student in Computer Science at UIUC"
+  links:
+    - label: "Email"
+      icon: "fas fa-fw fa-envelope"
+      url: "mailto:qiqianf2@illinois.edu"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/QiqianFu"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/qiqian-fu-249bb5258/"
+    - label: "Google Scholar"
+      icon: "fas fa-fw fa-graduation-cap"
+      url: "https://scholar.google.com/citations?hl=zh-CN&user=w2BB-eUAAAAJ"
+
+footer:
+  since: "2024"
+atom_feed:
+  hide: true
+search: false
+breadcrumbs: false
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-remote-theme
+  - jekyll-include-cache
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: single
+      author_profile: true
+      read_time: false
+      share: false
+      related: false
+
+# Keep the old template sources for reference, but do not publish demo pages.
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - vendor
+  - work
+  - outputs
+  - css
+  - js
+  - empty.html
+  - widgets.html
+  - embedding.html
+  - menu.html
+  - footer.html
+  - file
+  - vid
+  - leetcode-agent/css
+  - leetcode-agent/js
