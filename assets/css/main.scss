@@ -2,7 +2,7 @@
 ---
 @charset "utf-8";
 
-$max-width: 1280px;
+$max-width: 1400px;
 $link-color: #245c81;
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
 @import "minimal-mistakes";
@@ -10,6 +10,18 @@ $link-color: #245c81;
 // Small content-specific additions; layouts, navigation, sidebar and footer are upstream.
 .author__avatar img { width: 110px; max-width: 100%; height: auto; border-radius: 8px; }
 .page__content { overflow-wrap: break-word; }
+.page__title { font-size: 1.35rem; line-height: 1.25; }
+.page__content h2 { font-size: 1.2rem; }
+.masthead__menu-item, .site-title { font-size: .9em; }
+
+// Use the theme's system font with a quieter, more consistent reading scale.
+@media (min-width: 64em) {
+  .page__content > p { font-size: .88em; line-height: 1.55; }
+}
+@media (min-width: 80em) {
+  .layout--single.wide #main > .sidebar { width: calc(260px - 1em); }
+  .layout--single.wide .page { width: calc(100% - 260px); }
+}
 .page__content h2 { margin-top: 2em; }
 .profile-project,
 .profile-experience {
@@ -32,14 +44,14 @@ $link-color: #245c81;
 .profile-project h3.profile-project__title {
   grid-column: 1 / -1;
   margin: 0;
-  font-size: 1em;
-  line-height: 1.45;
+  font-size: .95em;
+  line-height: 1.4;
 }
 .profile-project__image { display: block; min-width: 0; }
 .profile-project__body { min-width: 0; }
 .profile-project__image img { display: block; width: 100%; height: auto; border: 1px solid $border-color; border-radius: 4px; }
 .profile-project__body {
-  p { margin: 0 0 .8em; font-size: .85em; }
+  p { margin: 0 0 .85em; font-size: .8em; line-height: 1.55; }
   .profile-project__meta { color: $muted-text-color; font-size: .72em; }
   .profile-project__recognition { color: #245c81; font-size: .75em; font-weight: 600; }
 }
@@ -51,7 +63,8 @@ $link-color: #245c81;
   .profile-experience__highlights {
     padding-left: 1.25em;
     margin: 1em 0 0;
-    font-size: .85em;
+    font-size: .8em;
+    line-height: 1.55;
     li { margin-bottom: .75em; }
     li:last-child { margin-bottom: 0; }
   }
@@ -85,4 +98,12 @@ $link-color: #245c81;
   .profile-project, .profile-experience { padding: 1em; border-radius: 10px; }
   .profile-project { grid-template-columns: 1fr; gap: .8em; }
   .profile-project__image { width: 100%; }
+}
+
+@media (max-width: 63.99em) {
+  .profile-project__body p,
+  .profile-experience__highlights { font-size: 1rem; }
+  .profile-project__body .profile-project__meta,
+  .profile-experience__meta { font-size: .85rem; }
+  .profile-project__body .profile-project__recognition { font-size: .85rem; }
 }
