@@ -755,7 +755,6 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 (function () {
   if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-  var daysTL = null, forgetTL = null; // 翻页要知道每个画面停在时间轴的哪里
 
   // ---- 遗忘曲线：权重 = (1 + 重要性) × 0.5^(天数 / 30)，与记忆召回的排序一致 ----
   var X0 = 60, X1 = 620, Y0 = 310, Y1 = 60, DAYS = 120;
@@ -806,7 +805,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var days = gsap.utils.toArray("#days .day");
     var caps = gsap.utils.toArray("#days .cap");
     var dots = gsap.utils.toArray("#days .tl i");
-    var tl = daysTL = gsap.timeline({
+    var tl = gsap.timeline({
       defaults: { duration: 1, ease: "power1.inOut" },
       scrollTrigger: { trigger: "#days", start: "top top", end: "bottom bottom", scrub: scrub }
     });
@@ -859,7 +858,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var lo = prep("c-lo"), hi = prep("c-hi"), lo2 = prep("c-lo2");
     var fc = gsap.utils.toArray("#forget-caps .cap");
     gsap.set(["#l-lo", "#l-hi", "#l-re", "#c-mark"], { autoAlpha: 0 });
-    forgetTL = gsap.timeline({
+    gsap.timeline({
       defaults: { duration: 1, ease: "none" },
       scrollTrigger: { trigger: "#forget", start: "top top", end: "bottom bottom", scrub: scrub }
     })
@@ -883,136 +882,119 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
   });
 
 
-  // ---- 带阻力的翻页 ----
-  // 页面上的每一个画面（跨天对话的每一天、每个分步讲解的每一步、遗忘曲线的每一段）都是一个停靠点。
-  // 滚轮或手指的位移先被"拉住"：页面只跟着挪一小段，越拉越难拉；
-  // 累计超过阈值就松开，平滑滑到下一个停靠点；没拉过阈值，就弹回原处。
+  // ---- 按页翻动 ----
+  // 一"页"是一个章节（首屏、跨天对话、超智记忆系统、心声、记忆消化、记忆召回、自然遗忘、实测）。
+  // 同一页里自由滚动，页内的动画跟着滚动走。
+  // 往下：滚到这一页的末尾时被拉住，位移越拉越小；突破阈值就滑到下一页的开头，没突破就弹回。
+  // 往上：没有阻力，一越过这一页的顶部，就直接滑到上一页的末尾。
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var anchors = [];
-    var mobile = function () { return window.innerWidth <= 900; };
+    var PAGE_SEL = [".hero", "#days", "#system", "#heart", "#digest", "#recall", "#forget", "#results"];
+    var tops = [], ends = [];
     function maxScroll() { return document.documentElement.scrollHeight - window.innerHeight; }
-    function docTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
-    function atTime(tl, t) {
-      var st = tl.scrollTrigger;
-      return st.start + (st.end - st.start) * Math.min(1, t / tl.duration());
-    }
     function build() {
-      var vh = window.innerHeight, max = maxScroll(), a = [0];
-      if (daysTL) [0, daysTL.labels.d1 + 2.6, daysTL.labels.d2 + 2.9].forEach(function (t) { a.push(atTime(daysTL, t)); });
-      a.push(docTop(document.getElementById("system")));
-      a.push(docTop(document.querySelector(".loop-wrap")) + 40);
-      document.querySelectorAll("[data-scrolly]").forEach(function (sc) {
-        a.push(docTop(sc.closest("section")));
-        sc.querySelectorAll(".step").forEach(function (step) {
-          // 让这一步落在激活线（视口 55%）附近：桌面放正中，手机放在钉住的图下面
-          var r = step.getBoundingClientRect();
-          a.push(r.top + window.scrollY + r.height / 2 - vh * (mobile() ? 0.78 : 0.5));
-        });
+      var vh = window.innerHeight, max = maxScroll();
+      tops = PAGE_SEL.map(function (sel) {
+        var el = document.querySelector(sel);
+        return Math.min(max, Math.round(el.getBoundingClientRect().top + window.scrollY));
       });
-      if (forgetTL) {
-        var L = forgetTL.labels;
-        [0.2, L.fade + 1.7, L.imp + 1.9, L.re + 1.7].forEach(function (t) { a.push(atTime(forgetTL, t)); });
-      }
-      a.push(docTop(document.getElementById("results")));
-      a.push(max);
-      a = a.map(function (y) { return Math.max(0, Math.min(max, Math.round(y))); }).sort(function (x, y) { return x - y; });
-      // 合并太近的点；太长的一段（正文）中间补停靠点，每次最多翻 0.9 屏，保证读得到
-      var out = [];
-      a.forEach(function (y) {
-        var prev = out[out.length - 1];
-        if (prev === undefined) { out.push(y); return; }
-        if (y - prev < 40) return;
-        var gap = y - prev;
-        if (gap > vh * 1.3) {
-          var n = Math.ceil(gap / (vh * 0.9));
-          for (var i = 1; i < n; i++) out.push(Math.round(prev + gap * i / n));
-        }
-        out.push(y);
+      ends = tops.map(function (t, i) {
+        var next = i + 1 < tops.length ? tops[i + 1] : max + vh;
+        return Math.min(max, Math.max(t, next - vh));
       });
-      anchors = out;
+    }
+    function pageAt(y) {
+      for (var i = tops.length - 1; i >= 0; i--) if (y >= tops[i] - 1) return i;
+      return 0;
     }
 
     var state = "idle";   // idle | pulling | moving
-    var acc = 0, base = 0, target = 0, dir = 0, releaseTimer = 0, tween = null;
+    var acc = 0, base = 0, page = 0, releaseTimer = 0, tween = null;
     var R = 70, WHEEL_GO = 130, TOUCH_GO = 70;
 
-    function nearest(y) {
-      var best = 0;
-      anchors.forEach(function (v, i) { if (Math.abs(v - y) < Math.abs(anchors[best] - y)) best = i; });
-      return anchors[best];
-    }
-    function nextFrom(y, d) {
-      if (d > 0) { for (var i = 0; i < anchors.length; i++) if (anchors[i] > y + 2) return anchors[i]; return anchors[anchors.length - 1]; }
-      for (var j = anchors.length - 1; j >= 0; j--) if (anchors[j] < y - 2) return anchors[j]; return anchors[0];
-    }
-    function rubber(d) { return Math.sign(d) * R * (1 - Math.exp(-Math.abs(d) / (R * 1.6))); }
-    function go(y, dur, ease, then) {
+    function rubber(d) { return R * (1 - Math.exp(-d / (R * 1.6))); }
+    function go(y, dur, then) {
       if (tween) tween.kill();
-      tween = gsap.to(window, { scrollTo: { y: y, autoKill: false }, duration: dur, ease: ease, overwrite: true, onComplete: then });
-    }
-    function moveTo(y) {
-      target = y; state = "moving"; acc = 0;
-      var dist = Math.abs(y - window.scrollY);
-      go(y, Math.min(1.1, 0.55 + dist / window.innerHeight * 0.25), "power3.out", function () {
-        // 到站就回到空闲：下一次滚动立刻重新开始计算阻力，没有冷却期
-        state = "idle"; acc = 0;
+      state = "moving"; acc = 0;
+      tween = gsap.to(window, {
+        scrollTo: { y: y, autoKill: false }, duration: dur, ease: "power3.out", overwrite: true,
+        onComplete: function () { state = "idle"; acc = 0; lastY = window.scrollY; if (then) then(); }
       });
     }
-    function startPull() {
-      if (state === "idle") { state = "pulling"; base = nearest(window.scrollY); acc = 0; if (tween) tween.kill(); }
-    }
-    // 拉住阶段：位移按橡皮筋衰减，突破阈值就滑向下一个停靠点
-    function pull(d, goAt) {
-      acc += d;
-      if (Math.abs(acc) >= goAt) { dir = Math.sign(acc); moveTo(nextFrom(base, dir)); return; }
-      window.scrollTo(0, Math.max(0, Math.min(maxScroll(), base + rubber(acc))));
-    }
-    // 滑动途中：同方向再突破一次阻力，就把终点往后挪一站，可以一路快速翻下去
-    function push(d, goAt) {
-      if (Math.sign(d) !== dir) { acc = 0; return; }
-      acc += d;
-      if (Math.abs(acc) >= goAt) moveTo(nextFrom(target, dir));
+    function flip(y) { go(y, Math.min(1.1, 0.55 + Math.abs(y - window.scrollY) / window.innerHeight * 0.25)); }
+    function toNext(i) { flip(tops[i + 1]); }
+    function toPrevEnd(i) { flip(ends[i - 1]); }
+
+    // 一次位移 d（向下为正）。返回 true 表示这次位移由翻页逻辑接管，不让浏览器原生滚动
+    function handle(d, goAt) {
+      if (state === "moving") return true;
+      var y = window.scrollY;
+      if (state === "pulling") {
+        acc += d;
+        if (acc <= 0) { state = "idle"; acc = 0; window.scrollTo(0, base); return true; }   // 拉回去了
+        if (acc >= goAt) { toNext(page); return true; }
+        window.scrollTo(0, Math.min(maxScroll(), base + rubber(acc)));
+        return true;
+      }
+      var i = pageAt(y);
+      if (d > 0 && i < tops.length - 1 && y + d > ends[i] + 0.5) {
+        page = i; base = ends[i]; state = "pulling";
+        acc = Math.max(0, y + d - ends[i]);
+        if (acc >= goAt) { toNext(i); return true; }
+        window.scrollTo(0, base + rubber(acc));
+        return true;
+      }
+      if (d < 0 && i > 0 && y + d < tops[i] - 0.5) { toPrevEnd(i); return true; }
+      return false;
     }
     function springBack() {
       if (state !== "pulling") return;
-      state = "moving"; target = base;
-      go(base, 0.35, "power2.out", function () { state = "idle"; acc = 0; });
+      go(base, 0.35);
     }
 
     window.addEventListener("wheel", function (e) {
       if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      e.preventDefault();
       var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
-      if (state === "moving") { push(d, WHEEL_GO); return; }
-      startPull();
-      pull(d, WHEEL_GO);
-      clearTimeout(releaseTimer);
-      releaseTimer = setTimeout(springBack, 140);
+      if (handle(d, WHEEL_GO)) {
+        e.preventDefault();
+        clearTimeout(releaseTimer);
+        if (state === "pulling") releaseTimer = setTimeout(springBack, 140);
+      }
     }, { passive: false });
 
-    var ty = null;
+    // 触屏：页内交给原生滚动（带惯性），只在页的边界接管
+    var ty = null, touchEndAt = 0, lastY = window.scrollY;
     window.addEventListener("touchstart", function (e) {
       ty = e.touches.length === 1 ? e.touches[0].clientY : null;
     }, { passive: true });
     window.addEventListener("touchmove", function (e) {
       if (ty === null || e.touches.length !== 1) return;
-      e.preventDefault();
       var y = e.touches[0].clientY, d = ty - y; ty = y;
-      if (state === "moving") { push(d, TOUCH_GO); return; }
-      startPull();
-      pull(d, TOUCH_GO);
+      if (handle(d, TOUCH_GO)) e.preventDefault();
     }, { passive: false });
-    window.addEventListener("touchend", function () { ty = null; springBack(); }, { passive: true });
+    window.addEventListener("touchend", function () { ty = null; touchEndAt = Date.now(); springBack(); }, { passive: true });
+    // 手指离开后的惯性滚动越过了页的边界：当作突破，直接翻页
+    window.addEventListener("scroll", function () {
+      var y = window.scrollY;
+      if (state === "idle" && ty === null && Date.now() - touchEndAt < 2500) {
+        var i = pageAt(lastY);
+        if (y > lastY && i < tops.length - 1 && y > ends[i] + 4) { toNext(i); return; }
+        if (y < lastY && i > 0 && y < tops[i] - 4) { toPrevEnd(i); return; }
+      }
+      if (state === "idle") lastY = y;
+    }, { passive: true });
 
     window.addEventListener("keydown", function (e) {
       if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
-      var k = { ArrowDown: 1, PageDown: 1, " ": e.shiftKey ? -1 : 1, ArrowUp: -1, PageUp: -1 }[e.key];
-      if (e.key === "Home" || e.key === "End") k = 0;
-      if (k === undefined) return;
+      var vh = window.innerHeight;
+      var d = { ArrowDown: 100, ArrowUp: -100, PageDown: vh * 0.85, PageUp: -vh * 0.85, " ": (e.shiftKey ? -1 : 1) * vh * 0.85 }[e.key];
+      if (e.key === "Home" || e.key === "End") { e.preventDefault(); flip(e.key === "Home" ? 0 : maxScroll()); return; }
+      if (d === undefined) return;
       e.preventDefault();
-      if (k === 0) { moveTo(e.key === "Home" ? 0 : maxScroll()); return; }
-      dir = k;
-      moveTo(nextFrom(state === "moving" ? target : window.scrollY, k));
+      if (state === "moving") return;
+      var y = window.scrollY, i = pageAt(y);
+      if (d > 0 && i < tops.length - 1 && y + d > ends[i] + 0.5) { y >= ends[i] - 1 ? toNext(i) : go(ends[i], 0.4); return; }
+      if (d < 0 && i > 0 && y + d < tops[i] - 0.5) { y <= tops[i] + 1 ? toPrevEnd(i) : go(tops[i], 0.4); return; }
+      go(y + d, 0.4);
     });
 
     ScrollTrigger.addEventListener("refresh", build);
