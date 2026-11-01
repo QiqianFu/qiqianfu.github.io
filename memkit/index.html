@@ -65,27 +65,55 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .lede { font-size: clamp(1.02rem, 1.5vw, 1.18rem); color: var(--muted); max-width: 34em; margin: 0 0 1em; }
 .chapter { padding: 128px 0 40px; }
 
-/* 手机外形 */
+/* 对话界面：游戏内短信的样子——黑底、白色气泡、圆形头像 */
+.phone, .chatbox { --chat-bg: #151515; --chat-line: #383838; --chat-dim: #8C8C8C; --chat-yellow: #E4D51B; --chat-pink: #EE6C8B; }
+.chatbox {
+  margin-top: 8px; padding: 12px 12px 14px; border-radius: 14px; background: var(--chat-bg); color: #fff;
+  display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.5;
+  background-image: repeating-linear-gradient(125deg, transparent 0 22px, rgba(255, 255, 255, .018) 22px 44px);
+}
+.chatbox .av { width: 30px; height: 30px; }
+.chatbox .row .msg { padding: 6px 12px; border-radius: 14px; margin-top: 0; }
+.chatbox .row .msg::before { top: 8px; }
+.chatbox .row.next { opacity: .45; }
+.chatbox .cut { align-self: center; font-size: 11.5px; color: var(--chat-dim); border-top: 1px dashed var(--chat-line); width: 100%; text-align: center; padding-top: 4px; }
 .phone {
-  width: 320px; max-width: 100%; height: 600px; border-radius: 36px; background: var(--surface);
-  border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(20, 30, 45, .12);
-  display: flex; flex-direction: column; overflow: hidden; position: relative;
+  width: 340px; max-width: 100%; height: 600px; border-radius: 30px; background: var(--chat-bg);
+  border: 6px solid #2A2A2A; box-shadow: 0 24px 60px rgba(10, 14, 20, .28), inset 0 0 0 1px #000;
+  display: flex; flex-direction: column; overflow: hidden; position: relative; color: #fff;
 }
-.phone-bar { padding: 18px 20px 12px; border-bottom: 1px solid var(--line); text-align: center; font-weight: 600; font-size: 15px; }
-.phone-body { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; position: relative; font-size: 14.5px; line-height: 1.6; }
-.msg { max-width: 82%; padding: 8px 12px; border-radius: 14px; }
-.msg.me { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-.msg.her { align-self: flex-start; background: var(--bg); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
-.stamp { align-self: center; font-size: 12px; color: var(--muted); }
+.phone-bar {
+  display: flex; align-items: center; gap: 8px; margin: 0 16px; padding: 18px 2px 10px;
+  border-bottom: 2px solid var(--chat-line); font-weight: 800; font-size: 16px; letter-spacing: .02em;
+}
+.phone-bar svg { width: 20px; height: 20px; flex: none; }
+.phone-body {
+  flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; position: relative;
+  font-size: 14px; line-height: 1.55;
+  background: repeating-linear-gradient(125deg, transparent 0 22px, rgba(255, 255, 255, .018) 22px 44px);
+}
+.row { display: flex; align-items: flex-start; gap: 9px; }
+.row.me { flex-direction: row-reverse; }
+.av { width: 40px; height: 40px; border-radius: 50%; flex: none; box-shadow: 0 0 0 2px #0A0A0A; }
+.row .msg {
+  position: relative; max-width: 76%; margin-top: 2px; padding: 8px 14px; border-radius: 17px;
+  background: #fff; color: #111; font-weight: 700;
+}
+.row .msg::before { content: ""; position: absolute; top: 10px; border-style: solid; border-color: transparent; }
+.row.her .msg::before { left: -7px; border-width: 6px 8px 6px 0; border-right-color: #fff; }
+.row.me .msg::before { right: -7px; border-width: 6px 0 6px 8px; border-left-color: #fff; }
+.stamp { align-self: center; font-size: 12px; color: var(--chat-dim); font-weight: 600; }
 .mem {
-  align-self: flex-start; font-size: 12px; line-height: 1.5; padding: 3px 10px; border-radius: 999px;
-  display: inline-flex; gap: 6px; align-items: center;
+  align-self: flex-start; margin-left: 49px; font-size: 12px; line-height: 1.5; padding: 3px 11px; border-radius: 12px;
+  display: inline-flex; gap: 6px; align-items: center; max-width: calc(100% - 49px);
+  background: #0B0B0B; color: #E8E8E8; border: 1.5px solid var(--chat-line);
 }
-.mem.p { color: var(--player); background: var(--player-soft); }
-.mem.c { color: var(--char); background: var(--char-soft); }
-.mem.no { color: var(--muted); background: transparent; border: 1px dashed var(--line); }
-.mem b { font-weight: 600; flex: none; }
-.mem { border-radius: 12px; max-width: 100%; }
+.mem.mp { border-color: var(--chat-yellow); }
+.mem.mp b { color: var(--chat-yellow); }
+.mem.mc { border-color: var(--chat-pink); }
+.mem.mc b { color: var(--chat-pink); }
+.mem.mn { border-style: dashed; color: var(--chat-dim); }
+.mem b { font-weight: 700; flex: none; }
 
 /* 首屏 */
 .hero { min-height: 100vh; display: flex; align-items: center; padding: 96px 0 64px; }
@@ -94,7 +122,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .scroll-hint { margin-top: 2.2em; font-size: 14px; color: var(--muted); }
 
 /* 跨天对话：滚动推进 */
-.days { height: 460vh; position: relative; }
+.days { height: 380vh; position: relative; }
 .days-pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
 .days .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px; align-items: center; width: 100%; }
 .days .phone { justify-self: center; }
@@ -224,7 +252,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .night .bub.her { background: #223040; border-color: #2E3D4E; color: var(--night-ink); }
 .night .memfile { background: #121A24; border-color: #2A3644; }
 .night .memfile .e { color: var(--night-muted); }
-.guard { margin-top: 8px; font-size: 13px; color: var(--night-muted); border-left: 3px solid var(--heart); padding-left: 10px; }
+.guard { margin-top: 8px; font-size: 13px; color: var(--muted); border-left: 3px solid var(--heart); padding-left: 10px; }
 
 /* 自然遗忘：曲线随滚动画出 */
 .forget { height: 380vh; position: relative; }
@@ -301,14 +329,14 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       <p class="scroll-hint">往下滚动，看她怎么记得 ↓</p>
     </div>
     <div class="phone" id="hero-phone" aria-label="示例对话">
-      <div class="phone-bar">柚叶</div>
+      <div class="phone-bar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8C8C8C" d="M12 3C6.5 3 2 6.8 2 11.5c0 2.4 1.2 4.6 3.1 6.1L4.5 21l3.9-2c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/><circle cx="8" cy="11.5" r="1.3" fill="#151515"/><circle cx="12" cy="11.5" r="1.3" fill="#151515"/><circle cx="16" cy="11.5" r="1.3" fill="#151515"/></svg>浮波柚叶</div>
       <div class="phone-body">
-        <span class="stamp">11月14日 周六 11:05</span>
-        <div class="msg me">我出门啦</div>
-        <div class="msg her">我已经到饮茶仙啦，占了靠窗的位子</div>
-        <div class="msg her">虾饺点好了，跟老板说了不放香菜~</div>
-        <span class="mem p"><b>想起</b>你不吃香菜 · 11月3日</span>
-        <span class="mem p"><b>想起</b>约好 14 号去饮茶仙 · 11月5日</span>
+        <span class="stamp">- 11月14日 周六 11:05 -</span>
+        <div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">我出门啦</div></div>
+        <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">我已经到饮茶仙啦，占了靠窗的位子</div></div>
+        <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">虾饺点好了，跟老板说了不放香菜~</div></div>
+        <span class="mem mp"><b>想起</b>你不吃香菜 · 11月3日</span>
+        <span class="mem mp"><b>想起</b>约好 14 号去饮茶仙 · 11月5日</span>
       </div>
     </div>
   </div>
@@ -321,59 +349,50 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
   <div class="days-pin">
     <div class="wrap">
       <div>
-        <div class="tl" aria-hidden="true"><i class="on"></i><span></span><i></i><span></span><i></i><span></span><i></i></div>
-        <div class="tl-labels" aria-hidden="true"><span>11/3</span><span>11/5</span><span>11/14</span><span>11/15</span></div>
+        <div class="tl" aria-hidden="true"><i class="on"></i><span></span><i></i><span></span><i></i></div>
+        <div class="tl-labels" aria-hidden="true"><span>11/5</span><span>11/14</span><span>11/18</span></div>
         <div class="caps">
-          <div class="cap">
-            <h2 class="h-mid">随口一提</h2>
-            <p>周二晚上，你抱怨外卖又放了香菜。她当场笑你，这件小事也被记下：你不吃香菜。</p>
-          </div>
           <div class="cap">
             <h2 class="h-mid">一个带日期的约定</h2>
             <p>周四你约她"下周六"去饮茶仙。记下来的不是"下周六"，而是 11 月 14 日、星期六。她自己答应过的事，也记在她那一边。</p>
           </div>
           <div class="cap">
             <h2 class="h-mid">九天后，自然地用上</h2>
-            <p>到了那天，她记得约定，也记得香菜。你不用提醒，她也不用刻意说"我记得"。记忆就藏在一句很普通的话里。</p>
+            <p>到了那天，她记得约定，也记得你不吃香菜。你不用提醒，她也不用刻意说"我记得"。记忆就藏在一句很普通的话里。</p>
           </div>
           <div class="cap">
-            <h2 class="h-mid">没发生过的事，她不认</h2>
-            <p>故意套她的话？记忆里没有的事，她不会顺着编。被冤枉了，她会反问回来。</p>
+            <h2 class="h-mid">记得你的喜好，也记得自己说过的话</h2>
+            <p>你提过喜欢结局温暖的电影，她挑片时就会想到。她自己说过要请你喝奶茶，也不会忘了兑现。关于你的，和她自己说过的，都是她的记忆。</p>
           </div>
         </div>
       </div>
       <div class="phone" aria-hidden="true">
-        <div class="phone-bar">柚叶</div>
+        <div class="phone-bar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8C8C8C" d="M12 3C6.5 3 2 6.8 2 11.5c0 2.4 1.2 4.6 3.1 6.1L4.5 21l3.9-2c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/><circle cx="8" cy="11.5" r="1.3" fill="#151515"/><circle cx="12" cy="11.5" r="1.3" fill="#151515"/><circle cx="16" cy="11.5" r="1.3" fill="#151515"/></svg>浮波柚叶</div>
         <div class="phone-body">
           <div class="day">
-            <span class="stamp">11月3日 周二 22:10</span>
-            <div class="msg me">外卖又放香菜了，我明明备注了</div>
-            <div class="msg her">哈哈哈好惨</div>
-            <div class="msg her">原来你不吃香菜呀~</div>
-            <span class="mem p"><b>记下</b>你不吃香菜</span>
+            <span class="stamp">- 11月5日 周四 19:30 -</span>
+            <div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">下周六一起去饮茶仙？</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">好呀！那就十四号~</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">说好了，不许放我鸽子哦</div></div>
+            <span class="mem mp"><b>记下</b>饮茶仙之约 · 2026-11-14（周六）</span>
+            <span class="mem mc"><b>记下</b>我答应了十四号去</span>
           </div>
           <div class="day">
-            <span class="stamp">11月5日 周四 19:30</span>
-            <div class="msg me">下周六一起去饮茶仙？</div>
-            <div class="msg her">好呀！那就十四号~</div>
-            <div class="msg her">说好了，不许放我鸽子哦</div>
-            <span class="mem p"><b>记下</b>饮茶仙之约 · 2026-11-14（周六）</span>
-            <span class="mem c"><b>记下</b>我答应了十四号去</span>
+            <span class="stamp">- 11月14日 周六 11:05 -</span>
+            <div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">我出门啦</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">我已经到啦，占了靠窗的位子</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">虾饺点好了，跟老板说了不放香菜~</div></div>
+            <span class="mem mp"><b>想起</b>你不吃香菜</span>
+            <span class="mem mp"><b>想起</b>饮茶仙之约</span>
           </div>
           <div class="day">
-            <span class="stamp">11月14日 周六 11:05</span>
-            <div class="msg me">我出门啦</div>
-            <div class="msg her">我已经到啦，占了靠窗的位子</div>
-            <div class="msg her">虾饺点好了，跟老板说了不放香菜~</div>
-            <span class="mem p"><b>想起</b>你不吃香菜</span>
-            <span class="mem p"><b>想起</b>饮茶仙之约</span>
-          </div>
-          <div class="day">
-            <span class="stamp">11月15日 周日 21:40</span>
-            <div class="msg me">你上次不是说讨厌虾饺吗</div>
-            <div class="msg her">我什么时候说过讨厌虾饺了？</div>
-            <div class="msg her">你可别冤枉我</div>
-            <span class="mem no">记忆里没有这回事 → 不认</span>
+            <span class="stamp">- 11月18日 周三 21:15 -</span>
+            <div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">周末看什么片好</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">你不是喜欢结局暖一点的嘛</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">那就看那部公路片！</div></div>
+            <div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">对了，上次说请你喝奶茶还没兑现，这回我请~</div></div>
+            <span class="mem mp"><b>想起</b>你喜欢结局温暖的电影</span>
+            <span class="mem mc"><b>想起</b>我说过要请你喝奶茶</span>
           </div>
         </div>
       </div>
@@ -458,7 +477,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 </section>
 
 <!-- 心声 -->
-<section class="night chapter" id="heart">
+<section class="chapter" id="heart">
   <div class="wrap">
     <p class="kicker">技术一</p>
     <h2 class="h-big">心声</h2>
@@ -468,7 +487,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     <div class="fig-wrap">
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0-2">
-          <div class="stage-h"><span class="tag">凌晨 01:02</span>你：睡不着</div>
+          <div class="stage-h"><span class="tag">凌晨 01:02</span>你发来一句话</div>
+          <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">睡不着</div></div></div>
           <div class="heart-block">
             <span class="heart-hidden">你看不到这段</span>
             <div class="lab">心声</div>
@@ -479,7 +499,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         </div>
         <div class="stage" data-lit="1-2">
           <div class="stage-h">发给你的消息</div>
-          <div class="reply-row"><span class="bub her">还没睡啊…</span><span class="bub her">怎么了，睡不着？</span></div>
+          <div class="chatbox"><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">还没睡啊…</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">怎么了，睡不着？</div></div></div>
         </div>
         <div class="stage" data-lit="2">
           <div class="stage-h"><span class="tag">记忆消化</span>她的记忆里留下的是</div>
@@ -520,13 +540,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0">
           <div class="stage-h"><span class="tag">模型判别</span>这个话题聊完了吗？<span class="p">0.91</span></div>
-          <ul class="lines">
-            <li><span class="who">你</span>下周六一起去饮茶仙？</li>
-            <li><span class="who">她</span>好呀！那就十四号~</li>
-            <li><span class="who">你</span>那我早点出门，先去排号</li>
-            <li><span class="who">她</span>说好了，不许放我鸽子哦</li>
-            <li class="next"><span class="who">你</span>对了，我下周要出差三天</li>
-          </ul>
+          <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">下周六一起去饮茶仙？</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">好呀！那就十四号~</div></div><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">那我早点出门，先去排号</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">说好了，不许放我鸽子哦</div></div><span class="cut">话题换了：上面这段送去消化</span><div class="row me next"><img class="av" src="img/player.png" alt=""><div class="msg">对了，我下周要出差三天</div></div></div>
         </div>
         <div class="stage" data-lit="1">
           <div class="stage-h"><span class="tag">模型判别</span>值得记吗？记给谁？<span class="p">0.88</span></div>
@@ -606,7 +620,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0">
           <div class="stage-h"><span class="tag">11月12日 周四</span>你的消息</div>
-          <div style="margin-top:6px"><span class="bub">这周六的饮茶仙，你还记得我不吃什么吗？</span></div>
+          <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">这周六的饮茶仙，你还记得我不吃什么吗？</div></div></div>
           <div class="note"><span class="tag">模型判别</span>&nbsp;需要回忆吗？<b style="color:var(--ok)">0.95</b>：在问过去说过的事</div>
         </div>
         <div class="stage" data-lit="1">
@@ -628,7 +642,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         <div class="stage" data-lit="4">
           <div class="stage-h">她只凭这些开口</div>
           <div class="evidence">饮茶仙之约：2026-11-14（周六）<br>不吃香菜：外卖备注了还被放，很在意<br>答应了十四号去</div>
-          <div class="reply-row"><span class="bub her">当然记得，不吃香菜嘛~</span><span class="bub her">虾饺我来点，你负责排号</span></div>
+          <div class="chatbox"><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">当然记得，不吃香菜嘛~</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">虾饺我来点，你负责排号</div></div></div>
         </div>
       </div>
     </div>
@@ -736,10 +750,12 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
 <script>
 (function () {
   if (!window.gsap || !window.ScrollTrigger) return;
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  var daysTL = null, forgetTL = null; // 翻页要知道每个画面停在时间轴的哪里
 
   // ---- 遗忘曲线：权重 = (1 + 重要性) × 0.5^(天数 / 30)，与记忆召回的排序一致 ----
   var X0 = 60, X1 = 620, Y0 = 310, Y1 = 60, DAYS = 120;
@@ -782,7 +798,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     // 首屏：唯一自动播放的一段——消息逐条出现，最后是"想起"的出处
     if (!reduce) {
       gsap.timeline({ defaults: { duration: 0.55, ease: "power2.out" }, delay: 0.2 })
-        .from("#hero-phone .msg", { autoAlpha: 0, y: 12, stagger: 0.45 })
+        .from("#hero-phone .row", { autoAlpha: 0, y: 12, stagger: 0.45 })
         .from("#hero-phone .mem", { autoAlpha: 0, x: -10, stagger: 0.25 }, "+=0.2");
     }
 
@@ -790,11 +806,10 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var days = gsap.utils.toArray("#days .day");
     var caps = gsap.utils.toArray("#days .cap");
     var dots = gsap.utils.toArray("#days .tl i");
-    var tl = gsap.timeline({
+    var tl = daysTL = gsap.timeline({
       defaults: { duration: 1, ease: "power1.inOut" },
       scrollTrigger: { trigger: "#days", start: "top top", end: "bottom bottom", scrub: scrub }
     });
-    tl.from(days[0].querySelectorAll(".msg, .mem"), { autoAlpha: 0, y: 8, stagger: 0.3 });
     for (var k = 1; k < days.length; k++) {
       var at = "d" + k;
       tl.addLabel(at, "+=0.8")
@@ -802,11 +817,11 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         .to(caps[k - 1], { autoAlpha: 0, y: -12 }, at)
         .fromTo(caps[k], { y: 12 }, { autoAlpha: 1, y: 0 }, at)
         .to(days[k], { autoAlpha: 1 }, at)
-        .from(days[k].querySelectorAll(".msg, .mem"), { autoAlpha: 0, y: 8, stagger: 0.3, immediateRender: false }, at + "+=0.3");
+        .from(days[k].querySelectorAll(".row, .mem"), { autoAlpha: 0, y: 8, stagger: 0.3, immediateRender: false }, at + "+=0.3");
     }
     tl.to({}, { duration: 0.8 });
     // 时间轴上的日期点：播放头过了哪一天的标签，就点亮到哪一天
-    var dayAt = [0, tl.labels.d1, tl.labels.d2, tl.labels.d3];
+    var dayAt = [0, tl.labels.d1, tl.labels.d2];
     tl.eventCallback("onUpdate", function () {
       var t = tl.time();
       dots.forEach(function (d, j) { d.classList.toggle("on", t >= dayAt[j]); });
@@ -844,7 +859,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var lo = prep("c-lo"), hi = prep("c-hi"), lo2 = prep("c-lo2");
     var fc = gsap.utils.toArray("#forget-caps .cap");
     gsap.set(["#l-lo", "#l-hi", "#l-re", "#c-mark"], { autoAlpha: 0 });
-    gsap.timeline({
+    forgetTL = gsap.timeline({
       defaults: { duration: 1, ease: "none" },
       scrollTrigger: { trigger: "#forget", start: "top top", end: "bottom bottom", scrub: scrub }
     })
@@ -866,6 +881,143 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       .to(lo2, { strokeDashoffset: 0, duration: 1.4 }, "re+=0.2")
       .to({}, { duration: 0.6 });
   });
+
+
+  // ---- 带阻力的翻页 ----
+  // 页面上的每一个画面（跨天对话的每一天、每个分步讲解的每一步、遗忘曲线的每一段）都是一个停靠点。
+  // 滚轮或手指的位移先被"拉住"：页面只跟着挪一小段，越拉越难拉；
+  // 累计超过阈值就松开，平滑滑到下一个停靠点；没拉过阈值，就弹回原处。
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var anchors = [];
+    var mobile = function () { return window.innerWidth <= 900; };
+    function maxScroll() { return document.documentElement.scrollHeight - window.innerHeight; }
+    function docTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
+    function atTime(tl, t) {
+      var st = tl.scrollTrigger;
+      return st.start + (st.end - st.start) * Math.min(1, t / tl.duration());
+    }
+    function build() {
+      var vh = window.innerHeight, max = maxScroll(), a = [0];
+      if (daysTL) [0, daysTL.labels.d1 + 2.6, daysTL.labels.d2 + 2.9].forEach(function (t) { a.push(atTime(daysTL, t)); });
+      a.push(docTop(document.getElementById("system")));
+      a.push(docTop(document.querySelector(".loop-wrap")) + 40);
+      document.querySelectorAll("[data-scrolly]").forEach(function (sc) {
+        a.push(docTop(sc.closest("section")));
+        sc.querySelectorAll(".step").forEach(function (step) {
+          // 让这一步落在激活线（视口 55%）附近：桌面放正中，手机放在钉住的图下面
+          var r = step.getBoundingClientRect();
+          a.push(r.top + window.scrollY + r.height / 2 - vh * (mobile() ? 0.78 : 0.5));
+        });
+      });
+      if (forgetTL) {
+        var L = forgetTL.labels;
+        [0.2, L.fade + 1.7, L.imp + 1.9, L.re + 1.7].forEach(function (t) { a.push(atTime(forgetTL, t)); });
+      }
+      a.push(docTop(document.getElementById("results")));
+      a.push(max);
+      a = a.map(function (y) { return Math.max(0, Math.min(max, Math.round(y))); }).sort(function (x, y) { return x - y; });
+      // 合并太近的点；太长的一段（正文）中间补停靠点，每次最多翻 0.9 屏，保证读得到
+      var out = [];
+      a.forEach(function (y) {
+        var prev = out[out.length - 1];
+        if (prev === undefined) { out.push(y); return; }
+        if (y - prev < 40) return;
+        var gap = y - prev;
+        if (gap > vh * 1.3) {
+          var n = Math.ceil(gap / (vh * 0.9));
+          for (var i = 1; i < n; i++) out.push(Math.round(prev + gap * i / n));
+        }
+        out.push(y);
+      });
+      anchors = out;
+    }
+
+    var state = "idle";   // idle | pulling | moving
+    var acc = 0, base = 0, target = 0, dir = 0, releaseTimer = 0, tween = null;
+    var R = 70, WHEEL_GO = 130, TOUCH_GO = 70;
+
+    function nearest(y) {
+      var best = 0;
+      anchors.forEach(function (v, i) { if (Math.abs(v - y) < Math.abs(anchors[best] - y)) best = i; });
+      return anchors[best];
+    }
+    function nextFrom(y, d) {
+      if (d > 0) { for (var i = 0; i < anchors.length; i++) if (anchors[i] > y + 2) return anchors[i]; return anchors[anchors.length - 1]; }
+      for (var j = anchors.length - 1; j >= 0; j--) if (anchors[j] < y - 2) return anchors[j]; return anchors[0];
+    }
+    function rubber(d) { return Math.sign(d) * R * (1 - Math.exp(-Math.abs(d) / (R * 1.6))); }
+    function go(y, dur, ease, then) {
+      if (tween) tween.kill();
+      tween = gsap.to(window, { scrollTo: { y: y, autoKill: false }, duration: dur, ease: ease, overwrite: true, onComplete: then });
+    }
+    function moveTo(y) {
+      target = y; state = "moving"; acc = 0;
+      var dist = Math.abs(y - window.scrollY);
+      go(y, Math.min(1.1, 0.55 + dist / window.innerHeight * 0.25), "power3.out", function () {
+        // 到站就回到空闲：下一次滚动立刻重新开始计算阻力，没有冷却期
+        state = "idle"; acc = 0;
+      });
+    }
+    function startPull() {
+      if (state === "idle") { state = "pulling"; base = nearest(window.scrollY); acc = 0; if (tween) tween.kill(); }
+    }
+    // 拉住阶段：位移按橡皮筋衰减，突破阈值就滑向下一个停靠点
+    function pull(d, goAt) {
+      acc += d;
+      if (Math.abs(acc) >= goAt) { dir = Math.sign(acc); moveTo(nextFrom(base, dir)); return; }
+      window.scrollTo(0, Math.max(0, Math.min(maxScroll(), base + rubber(acc))));
+    }
+    // 滑动途中：同方向再突破一次阻力，就把终点往后挪一站，可以一路快速翻下去
+    function push(d, goAt) {
+      if (Math.sign(d) !== dir) { acc = 0; return; }
+      acc += d;
+      if (Math.abs(acc) >= goAt) moveTo(nextFrom(target, dir));
+    }
+    function springBack() {
+      if (state !== "pulling") return;
+      state = "moving"; target = base;
+      go(base, 0.35, "power2.out", function () { state = "idle"; acc = 0; });
+    }
+
+    window.addEventListener("wheel", function (e) {
+      if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+      if (state === "moving") { push(d, WHEEL_GO); return; }
+      startPull();
+      pull(d, WHEEL_GO);
+      clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(springBack, 140);
+    }, { passive: false });
+
+    var ty = null;
+    window.addEventListener("touchstart", function (e) {
+      ty = e.touches.length === 1 ? e.touches[0].clientY : null;
+    }, { passive: true });
+    window.addEventListener("touchmove", function (e) {
+      if (ty === null || e.touches.length !== 1) return;
+      e.preventDefault();
+      var y = e.touches[0].clientY, d = ty - y; ty = y;
+      if (state === "moving") { push(d, TOUCH_GO); return; }
+      startPull();
+      pull(d, TOUCH_GO);
+    }, { passive: false });
+    window.addEventListener("touchend", function () { ty = null; springBack(); }, { passive: true });
+
+    window.addEventListener("keydown", function (e) {
+      if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+      var k = { ArrowDown: 1, PageDown: 1, " ": e.shiftKey ? -1 : 1, ArrowUp: -1, PageUp: -1 }[e.key];
+      if (e.key === "Home" || e.key === "End") k = 0;
+      if (k === undefined) return;
+      e.preventDefault();
+      if (k === 0) { moveTo(e.key === "Home" ? 0 : maxScroll()); return; }
+      dir = k;
+      moveTo(nextFrom(state === "moving" ? target : window.scrollY, k));
+    });
+
+    ScrollTrigger.addEventListener("refresh", build);
+    build();
+  }
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
 })();
