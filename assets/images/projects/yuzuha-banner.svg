@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="400" viewBox="0 0 1440 400" role="img" aria-labelledby="title desc">
+<title id="title">Yuzuha — a role-play companion that remembers you</title><desc id="desc">A chat reply grounded in two recalled memories: a player preference and a dated promise.</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#eef3f7"/><stop offset="1" stop-color="#f7efe4"/></linearGradient></defs>
+<rect width="1440" height="400" rx="24" fill="url(#bg)"/>
+<g font-family="Inter,Segoe UI,PingFang SC,Arial,sans-serif">
+<text x="64" y="160" fill="#141b24" font-size="76" font-weight="800" letter-spacing="-2">She remembers you.</text>
+<text x="66" y="222" fill="#2b4a5e" font-size="30" font-weight="600">A WeChat role-play companion with long-term memory.</text>
+<text x="66" y="272" fill="#5d6875" font-size="20">Scene, event and time memory. Player and character sides. Natural forgetting.</text>
+<g transform="translate(940 64)">
+<rect width="436" height="272" rx="22" fill="#fff" opacity=".9"/>
+<text x="218" y="40" fill="#5d6875" font-size="14" text-anchor="middle">Sat, Nov 14 · 11:05</text>
+<rect x="248" y="58" width="162" height="40" rx="14" fill="#2b6c8e"/>
+<text x="329" y="84" fill="#fff" font-size="16" text-anchor="middle">I'm heading out!</text>
+<rect x="26" y="112" width="330" height="62" rx="14" fill="#f4f6f8" stroke="#dadfe5"/>
+<text x="44" y="138" fill="#141b24" font-size="16">Got us dumplings — told them</text>
+<text x="44" y="161" fill="#141b24" font-size="16">no cilantro for you~</text>
+<rect x="26" y="190" width="250" height="28" rx="14" fill="#e1edf4"/>
+<text x="42" y="209" fill="#2b6c8e" font-size="13.5" font-weight="600">recalled · you don't eat cilantro</text>
+<rect x="26" y="226" width="286" height="28" rx="14" fill="#f6ead9"/>
+<text x="42" y="245" fill="#b06f22" font-size="13.5" font-weight="600">recalled · promised Nov 14, dim sum</text>
+</g>
+</g>
+</svg>

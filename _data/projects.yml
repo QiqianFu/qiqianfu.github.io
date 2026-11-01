@@ -18,6 +18,24 @@ research:
       - label: "Paper"
         url: "https://arxiv.org/abs/2505.23769"
 personal:
+  - title: "Yuzuha: A Role-Play Companion with Long-Term Memory"
+    url: "/memkit/"
+    image_layout: "wide"
+    image: "/assets/images/projects/yuzuha-banner.svg"
+    image_alt: "A chat reply grounded in two recalled memories"
+    meta: "TypeScript, OpenClaw, WeChat · Agent memory, role-play"
+    description: >-
+      A WeChat companion that role-plays Ukinami Yuzuha from Zenless Zone Zero and
+      remembers the player across days and sessions. Its memory system keeps scene,
+      event and time memory, separates what it knows about the player from what the
+      character said about herself, and lets unused memories fade with a half-life.
+      Built on three mechanisms: a hidden inner monologue before every reply, memory
+      digestion after each topic (model judgments decide what to keep and where, an
+      LLM only writes), and judged recall before each answer, so the character never
+      fakes a memory.
+    links:
+      - label: "Workflow"
+        url: "/memkit/"
   - title: "Qev: Qwen-Based Decision Models"
     url: "https://github.com/QiqianFu/Qev"
     image_layout: "wide"
