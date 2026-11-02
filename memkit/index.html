@@ -57,6 +57,8 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .top .wrap { display: flex; justify-content: space-between; padding-top: 20px; font-size: 15px; color: var(--muted); }
 .top a { color: var(--muted); text-decoration: none; }
 .top a:hover { color: var(--ink); }
+.top a.to-demo { color: var(--ink); font-weight: 600; border: 1.5px solid var(--line); border-radius: 999px; padding: 3px 14px; background: var(--surface); }
+.top a.to-demo:hover { border-color: var(--accent); color: var(--accent); }
 
 /* 章节标题：大字号，承担页面的个性 */
 .kicker { font-size: 15px; color: var(--accent); font-weight: 600; margin: 0 0 14px; }
@@ -364,7 +366,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 </head>
 <body>
 
-<nav class="top" aria-label="站点"><div class="wrap"><a href="/">Qiqian Fu</a><span>角色扮演系统</span></div></nav>
+<nav class="top" aria-label="站点"><div class="wrap"><a href="/">Qiqian Fu</a><a class="to-demo" href="demo/">聊天演示</a></div></nav>
 
 <header class="hero">
   <div class="wrap">

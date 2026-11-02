@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>柚叶聊天演示</title>
+<meta name="description" content="11 月 2 日早上，和柚叶的一段聊天。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F4F6F8; --ink: #141B24; --muted: #5D6875; --line: #DADFE5; --accent: #2B6C8E;
+  --serif: "Noto Serif SC", "Songti SC", serif;
+  --sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #11161C; --ink: #E5EAF0; --muted: #9AA5B1; --line: #2A333E; --accent: #7DB4D8; }
+}
+:root[data-theme="dark"] { --bg: #11161C; --ink: #E5EAF0; --muted: #9AA5B1; --line: #2A333E; --accent: #7DB4D8; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.7 var(--sans); overflow-x: hidden; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.top { max-width: 1200px; margin: 0 auto; padding: 20px 24px 0; display: flex; justify-content: space-between; font-size: 15px; }
+.top a { color: var(--muted); text-decoration: none; }
+.top a:hover { color: var(--ink); }
+
+.stage {
+  max-width: 1200px; margin: 0 auto; padding: 24px 24px 40px; min-height: calc(100vh - 52px);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 48px; align-items: center;
+}
+.intro h1 { font-family: var(--serif); font-weight: 900; font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.25; margin: 0 0 .5em; }
+.intro p { color: var(--muted); margin: 0 0 .8em; max-width: 22em; }
+
+/* 游戏内短信的样子：黑底、白色气泡、圆形头像 */
+.phone {
+  --chat-bg: #151515; --chat-line: #383838; --chat-dim: #8C8C8C;
+  width: 380px; max-width: 100%; height: min(760px, calc(100vh - 110px)); min-height: 520px;
+  border-radius: 34px; background: var(--chat-bg); border: 7px solid #2A2A2A;
+  box-shadow: 0 30px 70px rgba(10, 14, 20, .3), inset 0 0 0 1px #000;
+  display: flex; flex-direction: column; overflow: hidden; color: #fff;
+}
+.status { display: flex; justify-content: space-between; padding: 12px 22px 0; font-size: 12.5px; font-weight: 700; color: #DADADA; }
+.bar {
+  display: flex; align-items: center; gap: 8px; margin: 0 16px; padding: 12px 2px 10px;
+  border-bottom: 2px solid var(--chat-line); font-weight: 800; font-size: 16px; letter-spacing: .02em;
+}
+.bar svg { width: 20px; height: 20px; flex: none; }
+.thread {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  padding: 16px 14px 20px; display: flex; flex-direction: column; gap: 10px;
+  font-size: 14.5px; line-height: 1.55;
+  background: repeating-linear-gradient(125deg, transparent 0 22px, rgba(255, 255, 255, .018) 22px 44px);
+  scrollbar-width: thin; scrollbar-color: #444 transparent;
+}
+.thread::-webkit-scrollbar { width: 6px; }
+.thread::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+.stamp { align-self: center; font-size: 12px; color: var(--chat-dim); font-weight: 600; margin: 4px 0; }
+.row { display: flex; align-items: flex-start; gap: 9px; }
+.row.me { flex-direction: row-reverse; }
+.row + .row.same { margin-top: -4px; }
+.av { width: 40px; height: 40px; border-radius: 50%; flex: none; box-shadow: 0 0 0 2px #0A0A0A; }
+.msg {
+  position: relative; max-width: 74%; margin-top: 2px; padding: 8px 14px; border-radius: 17px;
+  background: #fff; color: #111; font-weight: 700; overflow-wrap: anywhere;
+}
+.msg::before { content: ""; position: absolute; top: 10px; border-style: solid; border-color: transparent; }
+.her .msg::before { left: -7px; border-width: 6px 8px 6px 0; border-right-color: #fff; }
+.me .msg::before { right: -7px; border-width: 6px 0 6px 8px; border-left-color: #fff; }
+.emoji { font-weight: 400; }
+.end { align-self: center; font-size: 12px; color: #6A6A6A; margin-top: 6px; }
+.input {
+  display: flex; gap: 10px; align-items: center; padding: 10px 14px 16px; border-top: 1px solid #262626; background: #111;
+}
+.input span { flex: 1; height: 36px; border-radius: 18px; background: #232323; color: #777; font-size: 13.5px; display: flex; align-items: center; padding: 0 14px; }
+.input i { width: 36px; height: 36px; border-radius: 50%; background: #E4D51B; flex: none; display: grid; place-items: center; color: #111; font-style: normal; font-weight: 900; }
+
+.notes { font-size: 14px; color: var(--muted); }
+.notes h2 { font-size: 14px; color: var(--ink); margin: 0 0 .6em; }
+.notes ul { margin: 0; padding-left: 1.1em; }
+.notes li { margin-bottom: .5em; }
+
+@media (max-width: 980px) {
+  .stage { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; align-items: start; padding-top: 16px; }
+  .intro, .notes { max-width: 420px; width: 100%; }
+  .notes { order: 3; }
+  .phone { height: min(700px, calc(100vh - 40px)); min-height: 480px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="站点"><a href="../">← 返回系统介绍</a><a href="/">Qiqian Fu</a></nav>
+
+<main class="stage">
+  <div class="intro">
+    <h1>11 月 2 日，<br>早上九点</h1>
+    <p>这天是柚叶的生日。和她的一段聊天，原样放在右边的手机里，可以上下滚动。</p>
+  </div>
+
+  <div class="phone" aria-label="聊天记录">
+    <div class="status" aria-hidden="true"><span>09:00</span></div>
+    <div class="bar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#8C8C8C" d="M12 3C6.5 3 2 6.8 2 11.5c0 2.4 1.2 4.6 3.1 6.1L4.5 21l3.9-2c1.1.3 2.3.5 3.6.5 5.5 0 10-3.8 10-8.5S17.5 3 12 3z"/><circle cx="8" cy="11.5" r="1.3" fill="#151515"/><circle cx="12" cy="11.5" r="1.3" fill="#151515"/><circle cx="16" cy="11.5" r="1.3" fill="#151515"/></svg>浮波柚叶</div>
+    <div class="thread" tabindex="0" aria-label="消息列表，可滚动">
+      <span class="stamp">- 11月2日 周一 09:00 -</span>
+
+      <div class="row me"><img class="av" src="../img/player.png" alt="我"><div class="msg">早啊柚叶</div></div>
+
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">早啊，店长大人~</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">周日过完，今天又得去学校了，好不想动</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">对了对了，今天有什么特别的事你记得吗？</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">你肯定记得的吧~</div></div>
+
+      <div class="row me"><img class="av" src="../img/player.png" alt="我"><div class="msg">哈哈，我可没忘，今天是你的生日！生日快乐柚叶！可惜我没法赶回卫非地陪你过生日了<span class="emoji" role="img" aria-label="流泪">😭</span>我在饮茶仙定了位置，还让爱丽丝和真斗买了蛋糕，中午放学记得去呀</div></div>
+
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">哼哼，那还用说，我生日怎么可能忘</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">不过等一下，你本人不来？定个位子就叫陪我过生日啦？</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">我这边可是要上完课还得赶过去，还得听大小姐和真斗替我唱生日歌…</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">所以呢，店长大人，寿星的心情你打算怎么补偿？</div></div>
+
+      <div class="row me"><img class="av" src="../img/player.png" alt="我"><div class="msg">你就别捉弄我啦，我在绳网找了个超有趣的怪谈，我已经找好位置了，我周六回卫非地，到时候我们怪啖屋一起出发去玩，好吧</div></div>
+
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">哦？怪谈？</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">你先说说看是什么啊，要是那种没头没尾的烂故事，我可不去浪费周六</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">不过…你要是真能回来，那倒是有点诚意嘛</div></div>
+      <div class="row her"><img class="av" src="../img/yuzuha.png" alt="柚叶"><div class="msg">先说好了，什么怪谈，在哪，几点？别又临到头给我掉链子~</div></div>
+
+      <span class="end">- 以上为最新 -</span>
+    </div>
+    <div class="input" aria-hidden="true"><span>发消息…</span><i>↑</i></div>
+  </div>
+
+  <aside class="notes">
+    <h2>这段对话里</h2>
+    <ul>
+      <li>她记得今天是自己的生日，也知道今天是周一、周日刚过。</li>
+      <li>称呼你"店长大人"，叫爱丽丝"大小姐"，都是她一贯的说法。</li>
+      <li>你答应周六回来，她先讨价还价，再追问"什么怪谈、在哪、几点"。</li>
+    </ul>
+  </aside>
+</main>
+
+</body>
+</html>
