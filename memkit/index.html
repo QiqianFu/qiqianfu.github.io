@@ -75,7 +75,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .chatbox .av { width: 30px; height: 30px; }
 .chatbox .row .msg { padding: 6px 12px; border-radius: 14px; margin-top: 0; }
 .chatbox .row .msg::before { top: 8px; }
-.chatbox .row.next { opacity: .45; }
+.chatbox .row.later { opacity: .45; }
 .chatbox .cut { align-self: center; font-size: 11.5px; color: var(--chat-dim); border-top: 1px dashed var(--chat-line); width: 100%; text-align: center; padding-top: 4px; }
 .phone {
   width: 340px; max-width: 100%; height: 600px; border-radius: 30px; background: var(--chat-bg);
@@ -595,7 +595,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0">
           <div class="stage-h"><span class="tag">模型判别</span>这个话题聊完了吗？<span class="p">0.91</span></div>
-          <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">下周六一起去饮茶仙？</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">好呀！那就十四号~</div></div><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">那我早点出门，先去排号</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">说好了，不许放我鸽子哦</div></div><span class="cut">话题换了：上面这段送去消化</span><div class="row me next"><img class="av" src="img/player.png" alt=""><div class="msg">对了，我下周要出差三天</div></div></div>
+          <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">下周六一起去饮茶仙？</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">好呀！那就十四号~</div></div><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">那我早点出门，先去排号</div></div><div class="row her"><img class="av" src="img/yuzuha.png" alt=""><div class="msg">说好了，不许放我鸽子哦</div></div><span class="cut">话题换了：上面这段送去消化</span><div class="row me later"><img class="av" src="img/player.png" alt=""><div class="msg">对了，我下周要出差三天</div></div></div>
         </div>
         <div class="stage" data-lit="1">
           <div class="stage-h"><span class="tag">模型判别</span>值得记吗？记给谁？<span class="p">0.88</span></div>
@@ -843,7 +843,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var fig = root.querySelector(".fig"), box = root.querySelector(".steps");
     var steps = gsap.utils.toArray(root.querySelectorAll(".step")), n = steps.length, idx = 0;
     var dots = root.querySelector(".dots"), count = root.querySelector(".count");
-    var prev = root.querySelector(".prev"), next = root.querySelector(".next");
+    var prev = root.querySelector(".arrow.prev"), next = root.querySelector(".arrow.next");
     steps.forEach(function () { dots.appendChild(document.createElement("i")); });
     var dotEls = dots.querySelectorAll("i");
     function fit() { box.style.height = Math.max.apply(null, steps.map(function (st) { return st.offsetHeight; })) + "px"; }
