@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>会记得你的柚叶</title>
+<title>陪你聊天对话的柚叶</title>
 <meta name="description" content="一个在微信上长期陪你聊天的角色扮演系统：角色是《绝区零》的浮波柚叶，靠一套超智记忆系统记得你们之间的事。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -254,21 +254,61 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .night .memfile .e { color: var(--night-muted); }
 .guard { margin-top: 8px; font-size: 13px; color: var(--muted); border-left: 3px solid var(--heart); padding-left: 10px; }
 
-/* 自然遗忘：曲线随滚动画出 */
-.forget { height: 380vh; position: relative; }
-.forget-pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
-.forget .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: center; width: 100%; }
-.chart { width: 100%; height: auto; }
-.chart .axis { stroke: var(--line); stroke-width: 1.5; }
-.chart .grid { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; }
-.chart text { fill: var(--muted); font-size: 13px; font-family: var(--sans); }
-.chart .c-hi { fill: none; stroke: var(--char); stroke-width: 3; stroke-linecap: round; }
-.chart .c-lo { fill: none; stroke: var(--player); stroke-width: 3; stroke-linecap: round; }
-.chart .c-lo2 { fill: none; stroke: var(--player); stroke-width: 3; stroke-linecap: round; }
-.chart .lbl-hi { fill: var(--char); font-weight: 600; }
-.chart .lbl-lo { fill: var(--player); font-weight: 600; }
-.chart .mark { fill: var(--player); }
-.chart .half { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 4; }
+/* 三项技术：一屏一项，功能用左右箭头翻 */
+.tech { min-height: 100vh; display: flex; align-items: center; padding: 64px 0 40px; }
+.tech-grid {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); grid-template-areas: "head fig" "body fig";
+  column-gap: 64px; row-gap: 10px; align-items: center; width: 100%;
+}
+.tech-head { grid-area: head; align-self: end; }
+.tech .h-big { font-size: clamp(2rem, 4.6vw, 3.4rem); }
+.tech .lede { font-size: 1rem; margin-bottom: .4em; }
+.tech .fig-wrap { grid-area: fig; position: static; height: auto; display: block; padding: 0; background: none; }
+.tech .fig { min-height: 480px; justify-content: center; max-height: none; overflow: visible; }
+.tech .fig .stage:not(.lit) { display: none; }
+.tech-body { grid-area: body; align-self: start; }
+.tech .steps { position: relative; padding: 0; margin-top: 10px; }
+.tech .step { position: absolute; left: 0; right: 0; top: 0; min-height: 0; display: block; }
+.tech .step-in { opacity: 1; background: none; border: 0; padding: 0; }
+.tech-nav { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+.arrow {
+  width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--surface);
+  color: var(--ink); font-size: 18px; cursor: pointer; transition: border-color .2s ease, color .2s ease, opacity .2s ease;
+}
+.arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.arrow:disabled { opacity: .35; cursor: default; }
+.arrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.dots { display: flex; gap: 6px; align-items: center; }
+.dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--line); transition: width .3s ease, background-color .3s ease; }
+.dots i.on { width: 22px; background: var(--accent); }
+.count { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+
+/* 自然遗忘：时间指针走过，四个窗口按顺时针依次出现 */
+.forget { min-height: 100vh; display: flex; align-items: center; padding: 64px 0 40px; }
+.forget-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 24px; }
+.forget-head .h-mid { margin: 0; }
+.clock { flex: 1; max-width: 520px; min-width: 260px; padding-bottom: 6px; }
+.clock-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.clock-day { font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: 1.2rem; }
+.ruler { position: relative; height: 4px; border-radius: 2px; background: var(--line); }
+.ruler-fill { position: absolute; inset: 0; background: var(--accent); border-radius: 2px; transform-origin: left; transform: scaleX(0); }
+.ruler-dot { position: absolute; left: -8px; top: -6px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); border: 3px solid var(--accent); box-sizing: border-box; }
+.wins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.win { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; cursor: pointer; visibility: hidden; }
+.win-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--line); background: var(--bg); font-size: 12.5px; color: var(--muted); }
+.win-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.win-body { padding: 14px 16px 12px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; align-items: center; }
+.win h3 { font-family: var(--serif); font-size: 1.15rem; line-height: 1.4; margin: 0 0 .3em; }
+.win p { margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+.mini { width: 100%; height: auto; display: block; }
+.mini .ax { stroke: var(--line); stroke-width: 1.5; }
+.mini .lo { fill: none; stroke: var(--player); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.mini .hi { fill: none; stroke: var(--char); stroke-width: 2.5; stroke-linecap: round; }
+.mini .pt { fill: var(--player); }
+.mini .hf { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4; }
+.mini text { fill: var(--muted); font-size: 11px; font-family: var(--sans); }
+.mini text.lh { fill: var(--char); font-weight: 600; }
+.mini text.ll { fill: var(--player); font-weight: 600; }
 
 /* 实测 */
 .nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 48px 0 32px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -285,10 +325,17 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 @media (max-width: 900px) {
   body { font-size: 16px; }
   .chapter { padding: 88px 0 24px; }
-  .hero .wrap, .days .wrap, .forget .wrap, .loop-wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .hero .wrap, .days .wrap, .loop-wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .hero { padding-top: 80px; }
   .hero .phone { height: 440px; }
-  .days-pin, .forget-pin { align-items: flex-start; padding-top: 24px; }
+  .days-pin { align-items: flex-start; padding-top: 24px; }
+  .tech, .forget { padding: 72px 0 40px; align-items: flex-start; }
+  .tech-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "fig" "body"; row-gap: 14px; }
+  .tech .fig { min-height: 0; padding: 14px; }
+  .tech .steps { grid-row: auto; }
+  .tech .step { min-height: 0; }
+  .wins { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .win-body { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .days .phone { height: 430px; width: 290px; }
   .caps { min-height: 10.5em; }
   .cap .h-mid { font-size: 1.45rem; }
@@ -323,8 +370,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
   <div class="wrap">
     <div>
       <p class="kicker">微信上的长期角色扮演</p>
-      <h1 class="h-big">她会记得你</h1>
-      <p class="lede">这是一个在微信上陪你长期聊天的角色扮演系统。角色是《绝区零》里的浮波柚叶：活泼，有点小狡黠。隔了几天、换了几次对话，她依然记得你说过的事，和你们之间的约定。</p>
+      <h1 class="h-big">陪你聊天对话的<br>柚叶</h1>
+      <p class="lede">这是一个在微信上陪你长期聊天的角色扮演系统。角色是《绝区零》里的浮波柚叶，她就像游戏里的柚叶一样，记得和你一起经历的冒险，你说过的事，和你们之间的约定。</p>
       <p class="lede">让她记得的，是一套<b style="color:var(--ink)">超智记忆系统</b>。</p>
       <p class="scroll-hint">往下滚动，看她怎么记得 ↓</p>
     </div>
@@ -404,7 +451,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 <section class="chapter" id="system">
   <div class="wrap">
     <p class="kicker">超智记忆系统</p>
-    <h2 class="h-big">记得对，忘得自然</h2>
+    <h2 class="h-big">像真人一样会记住事情，也会忘记</h2>
     <p class="lede">一个角色"记得"你，不能靠语言模型临场发挥：它能很流畅地说出"你上周跟我说过……"，哪怕那件事从没发生过。所以柚叶知道的关于你、关于你们的一切，都只来自记忆系统真正存下、并且这一轮判断为相关的记忆。</p>
     <div class="caps-grid">
       <div class="capa">
@@ -477,16 +524,16 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 </section>
 
 <!-- 心声 -->
-<section class="chapter" id="heart">
-  <div class="wrap">
-    <p class="kicker">技术一</p>
+<section class="tech" id="heart">
+  <div class="wrap tech-grid" data-tech>
+    <div class="tech-head">
+      <p class="kicker">技术一</p>
     <h2 class="h-big">心声</h2>
     <p class="lede">每次回复之前，她先在心里想一遍：此刻是什么心情，从你这句话里读到了什么，打算逗你还是安慰你。心声决定了她说话的语气，也让她的情绪能被记住。</p>
-  </div>
-  <div class="wrap scrolly" data-scrolly>
+    </div>
     <div class="fig-wrap">
       <div class="fig" aria-hidden="true">
-        <div class="stage" data-lit="0-2">
+        <div class="stage" data-lit="0-1">
           <div class="stage-h"><span class="tag">凌晨 01:02</span>你发来一句话</div>
           <div class="chatbox"><div class="row me"><img class="av" src="img/player.png" alt=""><div class="msg">睡不着</div></div></div>
           <div class="heart-block">
@@ -508,7 +555,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         </div>
       </div>
     </div>
-    <div class="steps">
+    <div class="tech-body">
+      <div class="steps">
       <div class="step"><div class="step-in">
         <h3><span class="n">1</span>先想，再说</h3>
         <p>每次回复都由两部分组成：先是两到六行心声，然后才是发给你的消息。心声用她自己的口吻写：困不困、开不开心，以及想怎么回你。</p>
@@ -524,18 +572,25 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         <p>记忆消化时，心声被当作"没说出口的心情"处理。于是她的记忆里不只有说过的话，还有当时的感受：那晚有点担心你。</p>
         <p>边界也很明确：心声只能留下心情和决定。测试中她曾在心声里把自己的生日想错，这类内容现在不会被当成事实记下。</p>
       </div></div>
+      </div>
+      <div class="tech-nav">
+        <button class="arrow prev" type="button" aria-label="上一个功能">←</button>
+        <span class="dots" aria-hidden="true"></span>
+        <button class="arrow next" type="button" aria-label="下一个功能">→</button>
+        <span class="count"></span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 记忆消化 -->
-<section class="chapter" id="digest">
-  <div class="wrap">
-    <p class="kicker">技术二</p>
+<section class="tech" id="digest">
+  <div class="wrap tech-grid" data-tech>
+    <div class="tech-head">
+      <p class="kicker">技术二</p>
     <h2 class="h-big">记忆消化</h2>
     <p class="lede">记忆不在聊天的当下写，而是等一个话题聊完，再像人回想一天那样整理一遍：哪些值得记，记在谁那边，和已有的哪段记忆是同一件事。</p>
-  </div>
-  <div class="wrap scrolly" data-scrolly>
+    </div>
     <div class="fig-wrap">
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0">
@@ -579,7 +634,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         </div>
       </div>
     </div>
-    <div class="steps">
+    <div class="tech-body">
+      <div class="steps">
       <div class="step"><div class="step-in">
         <h3><span class="n">1</span>等这个话题聊完</h3>
         <p>每条新消息进来，判别模型都会先问一句：话题换了吗？"对了，我下周要出差"显然换了，于是关于饮茶仙的这几句被打包，交给消化。</p>
@@ -604,18 +660,25 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         <h3><span class="n">5</span>检查之后，稳稳落盘</h3>
         <p>写好的内容要先过代码检查，不合格就退回重写。整个过程是持久化的任务：服务重启、某一步失败，都不会丢失，也不会重复写入。</p>
       </div></div>
+      </div>
+      <div class="tech-nav">
+        <button class="arrow prev" type="button" aria-label="上一个功能">←</button>
+        <span class="dots" aria-hidden="true"></span>
+        <button class="arrow next" type="button" aria-label="下一个功能">→</button>
+        <span class="count"></span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 记忆召回 -->
-<section class="chapter" id="recall">
-  <div class="wrap">
-    <p class="kicker">技术三</p>
+<section class="tech" id="recall">
+  <div class="wrap tech-grid" data-tech>
+    <div class="tech-head">
+      <p class="kicker">技术三</p>
     <h2 class="h-big">记忆召回</h2>
     <p class="lede">在她开口之前，系统先决定这一轮该想起什么，并且只把真正相关的记忆交给她。想不起来的事，她就说想不起来。</p>
-  </div>
-  <div class="wrap scrolly" data-scrolly>
+    </div>
     <div class="fig-wrap">
       <div class="fig" aria-hidden="true">
         <div class="stage" data-lit="0">
@@ -646,7 +709,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         </div>
       </div>
     </div>
-    <div class="steps">
+    <div class="tech-body">
+      <div class="steps">
       <div class="step"><div class="step-in">
         <h3><span class="n">1</span>先判断：需要回忆吗</h3>
         <p>不是每句话都要翻记忆。"早安"不用，"你还记得吗"要用。提到一件对话里没讲过的事，好像她应该知道，也要用。</p>
@@ -671,55 +735,59 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         <p>回答的模型没有任何工具，看到的只有人设、对话和这几条记忆。记忆里没有的事，她就说想不起来，或者反问你一句，而不是猜。</p>
         <p>如果模型模仿记忆的格式自己编了一段，发出去之前也会被删掉。</p>
       </div></div>
+      </div>
+      <div class="tech-nav">
+        <button class="arrow prev" type="button" aria-label="上一个功能">←</button>
+        <span class="dots" aria-hidden="true"></span>
+        <button class="arrow next" type="button" aria-label="下一个功能">→</button>
+        <span class="count"></span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- 自然遗忘 -->
 <section class="forget" id="forget" aria-label="自然遗忘">
-  <div class="forget-pin">
-    <div class="wrap">
-      <div class="caps" id="forget-caps">
-        <div class="cap">
-          <p class="kicker">自然遗忘</p>
-          <h2 class="h-mid">刚记下时最清楚</h2>
-          <p>每份记忆都有一个"想起来的容易程度"，刚写下时最高。</p>
-        </div>
-        <div class="cap">
-          <p class="kicker">自然遗忘</p>
-          <h2 class="h-mid">不提，就慢慢淡</h2>
-          <p>一件事三十天没被提起，权重减半。随口一提的小事，几个月后就很难再排进候选。</p>
-        </div>
-        <div class="cap">
-          <p class="kicker">自然遗忘</p>
-          <h2 class="h-mid">重要的事，淡得慢</h2>
-          <p>记忆消化时，LLM 会给每份记忆打一个重要程度。约定、承诺这类重要的事，起点更高，过了很久也还在前面。</p>
-        </div>
-        <div class="cap">
-          <p class="kicker">自然遗忘</p>
-          <h2 class="h-mid">再提起，又变新</h2>
-          <p>某天你又说起那件小事，这份记忆被更新，重新变得鲜明。淡了不是删了，记忆一直都在。</p>
-        </div>
+  <div class="wrap">
+    <div class="forget-head">
+      <div>
+        <p class="kicker">自然遗忘</p>
+        <h2 class="h-mid">时间会让记忆变淡</h2>
       </div>
-      <svg class="chart" id="chart" viewBox="0 0 640 380" aria-hidden="true">
-        <line class="grid" x1="60" y1="60" x2="620" y2="60"/>
-        <line class="grid" x1="60" y1="185" x2="620" y2="185"/>
-        <line class="axis" x1="60" y1="310" x2="620" y2="310"/>
-        <line class="axis" x1="60" y1="40" x2="60" y2="310"/>
-        <text x="60" y="336">记下</text>
-        <text x="200" y="336">30 天</text>
-        <text x="340" y="336">60 天</text>
-        <text x="480" y="336">90 天</text>
-        <text x="575" y="336">120 天</text>
-        <text x="20" y="52" transform="rotate(-90 20 52)" text-anchor="end">容易想起</text>
-        <path class="c-lo" id="c-lo"/>
-        <path class="c-hi" id="c-hi"/>
-        <path class="c-lo2" id="c-lo2"/>
-        <circle class="mark" id="c-mark" r="6"/>
-        <text class="lbl-lo" id="l-lo">随口一提的小事</text>
-        <text class="lbl-hi" id="l-hi">重要的约定</text>
-        <text class="lbl-lo" id="l-re">又被提起</text>
-      </svg>
+      <div class="clock" aria-hidden="true">
+        <div class="clock-top"><span class="clock-day" id="clock-day">第 0 天</span><span>滚动鼠标或点击窗口，时间走得更快</span></div>
+        <div class="ruler" id="ruler"><i class="ruler-fill"></i><i class="ruler-dot"></i></div>
+      </div>
+    </div>
+    <div class="wins">
+      <article class="win">
+        <div class="win-bar"><i></i>第 0 天</div>
+        <div class="win-body">
+          <div><h3>刚记下时最清楚</h3><p>每份记忆都有一个“想起来的容易程度”，刚写下时最高。</p></div>
+          <svg class="mini" viewBox="0 0 300 110" aria-hidden="true"></svg>
+        </div>
+      </article>
+      <article class="win">
+        <div class="win-bar"><i></i>第 30 天</div>
+        <div class="win-body">
+          <div><h3>不提，就慢慢淡</h3><p>三十天没被提起，权重减半。随口一提的小事，几个月后就很难再排进候选。</p></div>
+          <svg class="mini" viewBox="0 0 300 110" aria-hidden="true"></svg>
+        </div>
+      </article>
+      <article class="win">
+        <div class="win-bar"><i></i>第 60 天</div>
+        <div class="win-body">
+          <div><h3>重要的事，淡得慢</h3><p>消化时每份记忆都会被打一个重要程度。约定、承诺起点更高，过了很久也还在前面。</p></div>
+          <svg class="mini" viewBox="0 0 300 110" aria-hidden="true"></svg>
+        </div>
+      </article>
+      <article class="win">
+        <div class="win-bar"><i></i>第 90 天</div>
+        <div class="win-body">
+          <div><h3>再提起，又变新</h3><p>你又说起那件小事，这份记忆被更新，重新变得鲜明。淡了不是删了，记忆一直都在。</p></div>
+          <svg class="mini" viewBox="0 0 300 110" aria-hidden="true"></svg>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -756,27 +824,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
   if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-  // ---- 遗忘曲线：权重 = (1 + 重要性) × 0.5^(天数 / 30)，与记忆召回的排序一致 ----
-  var X0 = 60, X1 = 620, Y0 = 310, Y1 = 60, DAYS = 120;
-  function px(d) { return X0 + (X1 - X0) * d / DAYS; }
-  function py(w) { return Y0 - (Y0 - Y1) * w / 2; }
-  function curve(imp, from, to, start) {
-    var pts = [];
-    for (var d = from; d <= to; d += 2) pts.push(px(d).toFixed(1) + "," + py((1 + imp) * Math.pow(0.5, (d - start) / 30)).toFixed(1));
-    return "M" + pts.join(" L");
-  }
-  var RE = 70; // 第 70 天又被提起
-  document.getElementById("c-lo").setAttribute("d", curve(0.25, 0, RE, 0));
-  document.getElementById("c-hi").setAttribute("d", curve(0.9, 0, DAYS, 0));
-  document.getElementById("c-lo2").setAttribute("d", "M" + px(RE) + "," + py(1.25 * Math.pow(0.5, RE / 30)).toFixed(1) + " L" + curve(0.3, RE, DAYS, RE).slice(1));
-  var mark = document.getElementById("c-mark");
-  mark.setAttribute("cx", px(RE)); mark.setAttribute("cy", py(1.3));
-  function place(id, x, y) { var t = document.getElementById(id); t.setAttribute("x", x); t.setAttribute("y", y); }
-  place("l-lo", px(10), py(1.25 * Math.pow(0.5, 10 / 30)) + 30);
-  place("l-hi", px(12), py(1.9 * Math.pow(0.5, 12 / 30)) - 14);
-  place("l-re", px(RE) + 12, py(1.3) - 10);
-
-  // ---- 分步讲解：data-lit="a" / "a-b" 在这些步骤点亮；ge-N 类给需要累积状态的样式用 ----
+  // ---- 技术里的图：data-lit="a" / "a-b" 在这些功能点亮；ge-N 类给需要累积状态的样式用 ----
   function inRange(spec, n) { var p = spec.split("-").map(Number); return n >= p[0] && n <= (p[1] === undefined ? p[0] : p[1]); }
   function last(spec) { var p = spec.split("-").map(Number); return p[p.length - 1]; }
   function apply(fig, n) {
@@ -788,6 +836,131 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var d = fig.querySelector("#d-cands"); if (d) d.classList.toggle("judged", n >= 2);
     var r = fig.querySelector("#r-cands"); if (r) r.classList.toggle("judged", n >= 3);
   }
+
+  // ---- 三项技术：同一项技术里的几个功能用左右箭头翻 ----
+  var techs = [];
+  document.querySelectorAll("[data-tech]").forEach(function (root) {
+    var fig = root.querySelector(".fig"), box = root.querySelector(".steps");
+    var steps = gsap.utils.toArray(root.querySelectorAll(".step")), n = steps.length, idx = 0;
+    var dots = root.querySelector(".dots"), count = root.querySelector(".count");
+    var prev = root.querySelector(".prev"), next = root.querySelector(".next");
+    steps.forEach(function () { dots.appendChild(document.createElement("i")); });
+    var dotEls = dots.querySelectorAll("i");
+    function fit() { box.style.height = Math.max.apply(null, steps.map(function (st) { return st.offsetHeight; })) + "px"; }
+    function mark() {
+      dotEls.forEach(function (d, j) { d.classList.toggle("on", j === idx); });
+      count.textContent = (idx + 1) + " / " + n;
+      prev.disabled = idx === 0; next.disabled = idx === n - 1;
+    }
+    function show(i) {
+      if (i < 0 || i >= n || i === idx) return;
+      var dir = i > idx ? 1 : -1, old = steps[idx];
+      idx = i; apply(fig, i); mark();
+      gsap.to(old, { autoAlpha: 0, x: -28 * dir, duration: 0.25, ease: "power2.in", overwrite: true });
+      gsap.fromTo(steps[i], { autoAlpha: 0, x: 28 * dir }, { autoAlpha: 1, x: 0, duration: 0.45, delay: 0.1, ease: "power2.out", overwrite: true });
+      gsap.fromTo(fig, { x: 16 * dir, autoAlpha: 0.4 }, { x: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out", overwrite: true });
+    }
+    gsap.set(steps, { autoAlpha: 0 }); gsap.set(steps[0], { autoAlpha: 1 });
+    apply(fig, 0); mark(); fit();
+    window.addEventListener("resize", fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    prev.addEventListener("click", function () { show(idx - 1); });
+    next.addEventListener("click", function () { show(idx + 1); });
+    // 触控板横向滑动：一次手势只翻一个
+    var ax = 0, lock = false, wt = 0;
+    root.addEventListener("wheel", function (e) {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      clearTimeout(wt); wt = setTimeout(function () { ax = 0; lock = false; }, 180);
+      if (lock) return;
+      ax += e.deltaX;
+      if (Math.abs(ax) > 60) { show(idx + (ax > 0 ? 1 : -1)); lock = true; ax = 0; }
+    }, { passive: false });
+    // 手指横向滑动
+    var sx = null, sy = 0;
+    root.addEventListener("touchstart", function (e) {
+      if (e.touches.length === 1) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }
+    }, { passive: true });
+    root.addEventListener("touchend", function (e) {
+      if (sx === null) return;
+      var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+    techs.push({ root: root, step: function (d) { show(idx + d); } });
+  });
+  window.addEventListener("keydown", function (e) {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    var mid = window.innerHeight / 2;
+    techs.forEach(function (t) {
+      var r = t.root.getBoundingClientRect();
+      if (r.top <= mid && r.bottom >= mid) { e.preventDefault(); t.step(e.key === "ArrowRight" ? 1 : -1); }
+    });
+  });
+
+  // ---- 自然遗忘：时间指针从第 0 天走到第 120 天，四个窗口按左上、右上、左下、右下出现 ----
+  // 曲线：权重 = (1 + 重要性) × 0.5^(天数 / 30)，与记忆召回的排序一致
+  var forgetCtl = (function () {
+    var root = document.getElementById("forget");
+    var X0 = 10, X1 = 290, Y0 = 100, Y1 = 12, D = 120, RE = 90, T = 9;
+    function x(d) { return (X0 + (X1 - X0) * d / D).toFixed(1); }
+    function y(w) { return (Y0 - (Y0 - Y1) * w / 2).toFixed(1); }
+    function pts(imp, from, to, start) {
+      var a = [];
+      for (var d = from; d <= to; d += 2) a.push(x(d) + "," + y((1 + imp) * Math.pow(0.5, (d - start) / 30)));
+      return a.join(" L");
+    }
+    var axis = '<line class="ax" x1="' + X0 + '" y1="' + Y0 + '" x2="' + X1 + '" y2="' + Y0 + '"/>';
+    var art = [
+      '<path class="lo" d="M' + pts(0.25, 0, 10, 0) + '"/><circle class="pt" cx="' + x(0) + '" cy="' + y(1.25) + '" r="5"/>' +
+        '<text x="' + (+x(0) + 12) + '" y="' + (+y(1.25) + 4) + '">刚记下</text>',
+      '<path class="lo" d="M' + pts(0.25, 0, 60, 0) + '"/>' +
+        '<line class="hf" x1="' + x(30) + '" y1="' + Y0 + '" x2="' + x(30) + '" y2="' + y(0.625) + '"/>' +
+        '<text x="' + (+x(30) + 6) + '" y="' + (+y(0.625) - 6) + '">30 天，减半</text>',
+      '<path class="lo" d="M' + pts(0.25, 0, 120, 0) + '"/><path class="hi" d="M' + pts(0.9, 0, 120, 0) + '"/>' +
+        '<text class="lh" x="' + x(62) + '" y="' + (+y(1.9 * Math.pow(0.5, 62 / 30)) - 8) + '">重要的约定</text>' +
+        '<text class="ll" x="' + x(70) + '" y="' + (+y(1.25 * Math.pow(0.5, 70 / 30)) + 16) + '">随口一提</text>',
+      '<path class="lo" d="M' + pts(0.25, 0, RE, 0) + ' L' + x(RE) + ',' + y(1.3) + ' L' + pts(0.3, RE, D, RE) + '"/>' +
+        '<circle class="pt" cx="' + x(RE) + '" cy="' + y(1.3) + '" r="5"/>' +
+        '<text x="' + (+x(RE) - 50) + '" y="' + (+y(1.3) - 2) + '">又提起</text>'
+    ];
+    var wins = gsap.utils.toArray(root.querySelectorAll(".win"));
+    wins.forEach(function (w, i) { w.querySelector(".mini").innerHTML = axis + art[i]; });
+
+    var ruler = document.getElementById("ruler"), dayEl = document.getElementById("clock-day");
+    var tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out" } });
+    tl.to(ruler.querySelector(".ruler-fill"), { scaleX: 1, duration: T, ease: "none" }, 0)
+      .to(ruler.querySelector(".ruler-dot"), { x: function () { return ruler.clientWidth; }, duration: T, ease: "none" }, 0);
+    [0.2, 2.4, 4.6, 6.8].forEach(function (at, i) {
+      var w = wins[i], paths = w.querySelectorAll("path"), marks = w.querySelectorAll("circle, text, .hf");
+      paths.forEach(function (p) { var l = p.getTotalLength(); gsap.set(p, { strokeDasharray: l, strokeDashoffset: l }); });
+      gsap.set(marks, { autoAlpha: 0 });
+      tl.addLabel("w" + i, at)
+        .fromTo(w, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.5 }, at)
+        .to(paths, { strokeDashoffset: 0, duration: 1.3, ease: "power1.inOut" }, at + 0.3)
+        .to(marks, { autoAlpha: 1, duration: 0.3 }, at + 1.2);
+    });
+    tl.eventCallback("onUpdate", function () {
+      dayEl.textContent = "第 " + Math.round(D * Math.min(1, tl.time() / T)) + " 天";
+    });
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) tl.progress(1);
+    else ScrollTrigger.create({ trigger: root, start: "top 65%", once: true, onEnter: function () { tl.play(); } });
+
+    var bt = 0;
+    function boost() {
+      if (tl.paused()) tl.play();
+      tl.timeScale(6);
+      clearTimeout(bt); bt = setTimeout(function () { tl.timeScale(1); }, 250);
+    }
+    // 点窗口：直接跳到下一个窗口出现的时刻
+    root.querySelector(".wins").addEventListener("click", function () {
+      var now = tl.time(), nextAt = null;
+      ["w0", "w1", "w2", "w3"].forEach(function (l) { if (nextAt === null && tl.labels[l] > now + 0.05) nextAt = tl.labels[l]; });
+      tl.seek(nextAt === null ? tl.duration() : nextAt).play();
+    });
+    return { busy: function () { return tl.progress() < 1; }, boost: boost };
+  })();
 
   var mm = gsap.matchMedia();
   mm.add({ motion: "(prefers-reduced-motion: no-preference)", reduce: "(prefers-reduced-motion: reduce)" }, function (ctx) {
@@ -834,57 +1007,12 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       scrollTrigger: { trigger: "#loop", start: "top 70%", toggleActions: "play none none none" }
     });
 
-    // 分步讲解（心声 → 记忆消化 → 记忆召回）
-    document.querySelectorAll("[data-scrolly]").forEach(function (sec) {
-      var fig = sec.querySelector(".fig");
-      var steps = sec.querySelectorAll(".step");
-      apply(fig, 0);
-      steps[0].classList.add("active");
-      steps.forEach(function (step, i) {
-        ScrollTrigger.create({
-          trigger: step, start: "top 55%", end: "bottom 55%",
-          onToggle: function (self) {
-            if (!self.isActive) return;
-            steps.forEach(function (s) { s.classList.remove("active"); });
-            step.classList.add("active");
-            apply(fig, i);
-          }
-        });
-      });
-    });
-
-    // 遗忘曲线：滚动画出
-    function prep(id) { var p = document.getElementById(id), l = p.getTotalLength(); gsap.set(p, { strokeDasharray: l, strokeDashoffset: l }); return p; }
-    var lo = prep("c-lo"), hi = prep("c-hi"), lo2 = prep("c-lo2");
-    var fc = gsap.utils.toArray("#forget-caps .cap");
-    gsap.set(["#l-lo", "#l-hi", "#l-re", "#c-mark"], { autoAlpha: 0 });
-    gsap.timeline({
-      defaults: { duration: 1, ease: "none" },
-      scrollTrigger: { trigger: "#forget", start: "top top", end: "bottom bottom", scrub: scrub }
-    })
-      .addLabel("fade", "+=0.4")
-      .to(fc[0], { autoAlpha: 0, y: -12, ease: "power1.inOut" }, "fade")
-      .fromTo(fc[1], { y: 12 }, { autoAlpha: 1, y: 0, ease: "power1.inOut" }, "fade")
-      .to(lo, { strokeDashoffset: 0, duration: 1.6 }, "fade")
-      .to("#l-lo", { autoAlpha: 1, duration: 0.4 }, "fade+=0.6")
-      .addLabel("imp", "+=0.4")
-      .to(fc[1], { autoAlpha: 0, y: -12, ease: "power1.inOut" }, "imp")
-      .fromTo(fc[2], { y: 12 }, { autoAlpha: 1, y: 0, ease: "power1.inOut" }, "imp")
-      .to(hi, { strokeDashoffset: 0, duration: 1.8 }, "imp")
-      .to("#l-hi", { autoAlpha: 1, duration: 0.4 }, "imp+=1")
-      .addLabel("re", "+=0.4")
-      .to(fc[2], { autoAlpha: 0, y: -12, ease: "power1.inOut" }, "re")
-      .fromTo(fc[3], { y: 12 }, { autoAlpha: 1, y: 0, ease: "power1.inOut" }, "re")
-      .to("#c-mark", { autoAlpha: 1, duration: 0.3 }, "re")
-      .to("#l-re", { autoAlpha: 1, duration: 0.3 }, "re")
-      .to(lo2, { strokeDashoffset: 0, duration: 1.4 }, "re+=0.2")
-      .to({}, { duration: 0.6 });
   });
 
 
   // ---- 按页翻动 ----
   // 一"页"是一个章节（首屏、跨天对话、超智记忆系统、心声、记忆消化、记忆召回、自然遗忘、实测）。
-  // 同一页里自由滚动，页内的动画跟着滚动走。
+  // 同一页里自由滚动，页内的动画跟着滚动走；三项技术各占一屏，页内的功能用左右箭头翻。
   // 往下：滚到这一页的末尾时被拉住，位移越拉越小；突破阈值就滑到下一页的开头，没突破就弹回。
   // 往上：没有阻力，一越过这一页的顶部，就直接滑到上一页的末尾。
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -917,7 +1045,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       state = "moving"; acc = 0;
       tween = gsap.to(window, {
         scrollTo: { y: y, autoKill: false }, duration: dur, ease: "power3.out", overwrite: true,
-        onComplete: function () { state = "idle"; acc = 0; lastY = window.scrollY; if (then) then(); }
+        // 到站后先停 50ms，再接受下一次滚动
+        onComplete: function () { lastY = window.scrollY; setTimeout(function () { state = "idle"; acc = 0; if (then) then(); }, 50); }
       });
     }
     function flip(y) { go(y, Math.min(1.1, 0.55 + Math.abs(y - window.scrollY) / window.innerHeight * 0.25)); }
@@ -936,6 +1065,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         return true;
       }
       var i = pageAt(y);
+      // 自然遗忘的时间还没走完：往下滚是让时间加速，不翻页（手机上窗口竖排，照常滚动）
+      if (d > 0 && PAGE_SEL[i] === "#forget" && window.innerWidth > 900 && forgetCtl.busy()) { forgetCtl.boost(); return true; }
       if (d > 0 && i < tops.length - 1 && y + d > ends[i] + 0.5) {
         page = i; base = ends[i]; state = "pulling";
         acc = Math.max(0, y + d - ends[i]);
