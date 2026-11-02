@@ -122,7 +122,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-
 .scroll-hint { margin-top: 2.2em; font-size: 14px; color: var(--muted); }
 
 /* 跨天对话：滚动推进 */
-.days { height: 380vh; position: relative; }
+.days { height: 100vh; position: relative; }
 .days-pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
 .days .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px; align-items: center; width: 100%; }
 .days .phone { justify-self: center; }
@@ -945,7 +945,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) tl.progress(1);
-    else ScrollTrigger.create({ trigger: root, start: "top 65%", once: true, onEnter: function () { tl.play(); } });
+    else ScrollTrigger.create({ trigger: root, start: "top 30%", once: true, onEnter: function () { tl.play(); } });
 
     var bt = 0;
     function boost() {
@@ -962,10 +962,10 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     return { busy: function () { return tl.progress() < 1; }, boost: boost };
   })();
 
+  var daysCtl = null;
   var mm = gsap.matchMedia();
   mm.add({ motion: "(prefers-reduced-motion: no-preference)", reduce: "(prefers-reduced-motion: reduce)" }, function (ctx) {
     var reduce = ctx.conditions.reduce;
-    var scrub = reduce ? true : 0.6;
 
     // 首屏：唯一自动播放的一段——消息逐条出现，最后是"想起"的出处
     if (!reduce) {
@@ -974,14 +974,17 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         .from("#hero-phone .mem", { autoAlpha: 0, x: -10, stagger: 0.25 }, "+=0.2");
     }
 
-    // 跨天对话：页面从上到下第一个 ScrollTrigger
+    // 跨天对话：三个画面。正常情况下由翻页逻辑一次播完一整段过渡（daysCtl）；
+    // 减少动效时没有翻页逻辑，退回成跟着滚动走
     var days = gsap.utils.toArray("#days .day");
     var caps = gsap.utils.toArray("#days .cap");
     var dots = gsap.utils.toArray("#days .tl i");
-    var tl = gsap.timeline({
-      defaults: { duration: 1, ease: "power1.inOut" },
-      scrollTrigger: { trigger: "#days", start: "top top", end: "bottom bottom", scrub: scrub }
-    });
+    var tlVars = { defaults: { duration: 1, ease: "power1.inOut" }, paused: true };
+    if (reduce) {
+      document.getElementById("days").style.height = "300vh";
+      tlVars = { defaults: tlVars.defaults, scrollTrigger: { trigger: "#days", start: "top top", end: "bottom bottom", scrub: true } };
+    }
+    var tl = gsap.timeline(tlVars);
     for (var k = 1; k < days.length; k++) {
       var at = "d" + k;
       tl.addLabel(at, "+=0.8")
@@ -998,6 +1001,27 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       var t = tl.time();
       dots.forEach(function (d, j) { d.classList.toggle("on", t >= dayAt[j]); });
     });
+    if (!reduce) {
+      // 每个画面播完的时刻；一次滚动 = 从当前画面完整播到下一个（或倒放回上一个）
+      var stops = [0, tl.labels.d1 + 2.6, Math.min(tl.duration(), tl.labels.d2 + 2.9)];
+      var stage = 0, anim = null, doneAt = 0;
+      var to = function (k) {
+        if (k < 0 || k >= stops.length) return false;
+        stage = k;
+        anim = tl.tweenTo(stops[k], { duration: 1.2, ease: "power1.inOut", onComplete: function () { anim = null; doneAt = Date.now(); } });
+        return true;
+      };
+      daysCtl = {
+        busy: function () { return !!anim; },
+        canNext: function () { return stage < stops.length - 1; },
+        canPrev: function () { return stage > 0; },
+        next: function () { return to(stage + 1); },
+        prev: function () { return to(stage - 1); },
+        set: function (k) { if (anim) anim.kill(); anim = null; stage = k; tl.pause(); tl.seek(stops[k]); },
+        last: function () { return stops.length - 1; },
+        doneAt: function () { return doneAt; }
+      };
+    }
 
     // 三项技术的循环：进入视口时画一圈
     var flow = document.getElementById("loop-flow");
@@ -1037,6 +1061,8 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
 
     var state = "idle";   // idle | pulling | moving
     var acc = 0, base = 0, page = 0, releaseTimer = 0, tween = null;
+    // 一次手势 = 中间没有超过 200ms 停顿的一串滚动事件。到站之前开始的手势（翻页那一下的惯性）不算新的操作
+    var gestureStart = 0, lastWheelAt = 0, arrivedAt = 0;
     var R = 70, WHEEL_GO = 130, TOUCH_GO = 70;
 
     function rubber(d) { return R * (1 - Math.exp(-d / (R * 1.6))); }
@@ -1046,12 +1072,28 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       tween = gsap.to(window, {
         scrollTo: { y: y, autoKill: false }, duration: dur, ease: "power3.out", overwrite: true,
         // 到站后先停 50ms，再接受下一次滚动
-        onComplete: function () { lastY = window.scrollY; setTimeout(function () { state = "idle"; acc = 0; if (then) then(); }, 50); }
+        onComplete: function () { lastY = window.scrollY; setTimeout(function () { state = "idle"; acc = 0; arrivedAt = Date.now(); if (then) then(); }, 50); }
       });
     }
     function flip(y) { go(y, Math.min(1.1, 0.55 + Math.abs(y - window.scrollY) / window.innerHeight * 0.25)); }
-    function toNext(i) { flip(tops[i + 1]); }
-    function toPrevEnd(i) { flip(ends[i - 1]); }
+    function toNext(i) {
+      if (daysCtl && PAGE_SEL[i + 1] === "#days") daysCtl.set(0);            // 从上面进来：第一个画面
+      flip(tops[i + 1]);
+    }
+    function toPrevEnd(i) {
+      if (daysCtl && PAGE_SEL[i - 1] === "#days") daysCtl.set(daysCtl.last()); // 从下面回来：最后一个画面
+      flip(ends[i - 1]);
+    }
+    // 跨天对话页：只要滚动就把一整段过渡播完，播放中的滚动都吃掉，不会停在两个画面之间
+    // 只有到站之后、上一段过渡播完之后新开始的滚动才算数，翻页或过渡剩下的惯性不会接着触发下一段
+    function daysStep(i, y, d, fresh) {
+      if (!daysCtl || PAGE_SEL[i] !== "#days" || y > ends[i] + 1) return false;
+      if (daysCtl.busy()) return true;
+      var ok = fresh || gestureStart > Math.max(arrivedAt, daysCtl.doneAt());
+      if (d > 0 && daysCtl.canNext()) { if (ok) daysCtl.next(); return true; }
+      if (d < 0 && daysCtl.canPrev() && y <= tops[i] + 1) { if (ok) daysCtl.prev(); return true; }
+      return false;
+    }
 
     // 一次位移 d（向下为正）。返回 true 表示这次位移由翻页逻辑接管，不让浏览器原生滚动
     function handle(d, goAt) {
@@ -1065,8 +1107,13 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
         return true;
       }
       var i = pageAt(y);
-      // 自然遗忘的时间还没走完：往下滚是让时间加速，不翻页（手机上窗口竖排，照常滚动）
-      if (d > 0 && PAGE_SEL[i] === "#forget" && window.innerWidth > 900 && forgetCtl.busy()) { forgetCtl.boost(); return true; }
+      if (daysStep(i, y, d, false)) return true;
+      // 自然遗忘的时间还没走完：往下滚不翻页；到站后新开始的滚动让时间加速，翻页剩下的惯性直接忽略
+      // （手机上窗口竖排，照常滚动）
+      if (d > 0 && PAGE_SEL[i] === "#forget" && window.innerWidth > 900 && forgetCtl.busy()) {
+        if (gestureStart > arrivedAt) forgetCtl.boost();
+        return true;
+      }
       if (d > 0 && i < tops.length - 1 && y + d > ends[i] + 0.5) {
         page = i; base = ends[i]; state = "pulling";
         acc = Math.max(0, y + d - ends[i]);
@@ -1085,6 +1132,9 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     window.addEventListener("wheel", function (e) {
       if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
       var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+      var now = Date.now();
+      if (now - lastWheelAt > 200) gestureStart = now;
+      lastWheelAt = now;
       if (handle(d, WHEEL_GO)) {
         e.preventDefault();
         clearTimeout(releaseTimer);
@@ -1096,6 +1146,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
     var ty = null, touchEndAt = 0, lastY = window.scrollY;
     window.addEventListener("touchstart", function (e) {
       ty = e.touches.length === 1 ? e.touches[0].clientY : null;
+      gestureStart = Date.now();
     }, { passive: true });
     window.addEventListener("touchmove", function (e) {
       if (ty === null || e.touches.length !== 1) return;
@@ -1123,6 +1174,7 @@ footer .wrap { padding-top: 32px; padding-bottom: 64px; font-size: 14px; color: 
       e.preventDefault();
       if (state === "moving") return;
       var y = window.scrollY, i = pageAt(y);
+      if (daysStep(i, y, d, true)) return;
       if (d > 0 && i < tops.length - 1 && y + d > ends[i] + 0.5) { y >= ends[i] - 1 ? toNext(i) : go(ends[i], 0.4); return; }
       if (d < 0 && i > 0 && y + d < tops[i] - 0.5) { y <= tops[i] + 1 ? toPrevEnd(i) : go(tops[i], 0.4); return; }
       go(y + d, 0.4);
